@@ -35,17 +35,17 @@
 RestProxyCall*
 gfbgraph_new_rest_call (GFBGraphAuthorizer *authorizer)
 {
-        RestProxy *proxy;
-        RestProxyCall *rest_call;
+  RestProxy *proxy;
+  RestProxyCall *rest_call;
 
-        g_return_val_if_fail (GFBGRAPH_IS_AUTHORIZER (authorizer), NULL);
+  g_return_val_if_fail (GFBGRAPH_IS_AUTHORIZER(authorizer), NULL);
 
-        proxy = rest_proxy_new (FACEBOOK_ENDPOINT, FALSE);
-        rest_call = rest_proxy_new_call (proxy);
+  proxy = rest_proxy_new (FACEBOOK_ENDPOINT, FALSE);
+  rest_call = rest_proxy_new_call (proxy);
 
-        gfbgraph_authorizer_process_call (authorizer, rest_call);
+  gfbgraph_authorizer_process_call (authorizer, rest_call);
 
-        g_object_unref (proxy);
+  g_object_unref (proxy);
 
-        return rest_call;
+  return rest_call;
 }
