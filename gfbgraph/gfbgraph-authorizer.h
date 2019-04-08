@@ -1,4 +1,4 @@
-/* -*- Mode: C; indent-tabs-mode: nil; c-basic-offset: 8; tab-width: 8 -*-  */
+/* -*- Mode: C; indent-tabs-mode: nil; c-basic-offset: 2; tab-width: 2 -*-  */
 /*
  * libgfbgraph - GObject library for Facebook Graph API
  * Copyright (C) 2013 Álvaro Peña <alvaropg@gmail.com>
@@ -40,25 +40,26 @@ G_DECLARE_INTERFACE (GFBGraphAuthorizer, gfbgraph_authorizer, GFBGRAPH, AUTHORIZ
  *
  * Interface structure for #GFBGraphAuthorizer. All methos should be thread safe.
  **/
-struct _GFBGraphAuthorizerInterface {
-        GTypeInterface parent;
+struct _GFBGraphAuthorizerInterface
+{
+  GTypeInterface parent;
 
-        void        (*process_call)          (GFBGraphAuthorizer *iface,
-                                              RestProxyCall *call);
-        void        (*process_message)       (GFBGraphAuthorizer *iface,
-                                              SoupMessage *message);
-        gboolean    (*refresh_authorization) (GFBGraphAuthorizer *iface,
-                                              GCancellable *cancellable,
-                                              GError **error);
+  void      (*process_call)           (GFBGraphAuthorizer *iface,
+                                       RestProxyCall      *call);
+  void      (*process_message)        (GFBGraphAuthorizer *iface,
+                                       SoupMessage        *message);
+  gboolean  (*refresh_authorization)  (GFBGraphAuthorizer  *iface,
+                                       GCancellable        *cancellable,
+                                       GError             **error);
 };
 
 void     gfbgraph_authorizer_process_call          (GFBGraphAuthorizer *iface,
-                                                    RestProxyCall *call);
+                                                    RestProxyCall      *call);
 void     gfbgraph_authorizer_process_message       (GFBGraphAuthorizer *iface,
-                                                    SoupMessage *message);
-gboolean gfbgraph_authorizer_refresh_authorization (GFBGraphAuthorizer *iface,
-                                                    GCancellable *cancellable,
-                                                    GError **error);
+                                                    SoupMessage        *message);
+gboolean gfbgraph_authorizer_refresh_authorization (GFBGraphAuthorizer  *iface,
+                                                    GCancellable        *cancellable,
+                                                    GError             **error);
 
 G_END_DECLS
 
