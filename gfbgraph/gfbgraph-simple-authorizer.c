@@ -156,6 +156,8 @@ gfbgraph_simple_authorizer_process_call (GFBGraphAuthorizer *iface,
 {
   GFBGraphSimpleAuthorizerPrivate *priv;
 
+  g_return_if_fail (GFBGRAPH_IS_SIMPLE_AUTHORIZER (iface));
+
   priv = GFBGRAPH_SIMPLE_AUTHORIZER_GET_PRIVATE (GFBGRAPH_SIMPLE_AUTHORIZER (iface));
 
   g_mutex_lock (&priv->mutex);
@@ -170,6 +172,8 @@ gfbgraph_simple_authorizer_process_message (GFBGraphAuthorizer *iface,
   gchar *auth_value;
   SoupURI *uri;
   GFBGraphSimpleAuthorizerPrivate *priv;
+
+  g_return_if_fail (GFBGRAPH_IS_SIMPLE_AUTHORIZER (iface));
 
   priv = GFBGRAPH_SIMPLE_AUTHORIZER_GET_PRIVATE (GFBGRAPH_SIMPLE_AUTHORIZER (iface));
 
