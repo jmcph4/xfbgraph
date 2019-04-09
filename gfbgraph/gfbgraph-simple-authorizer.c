@@ -208,6 +208,8 @@ gfbgraph_simple_authorizer_refresh_authorization (GFBGraphAuthorizer  *iface,
 GFBGraphSimpleAuthorizer*
 gfbgraph_simple_authorizer_new (const gchar *access_token)
 {
+  g_return_val_if_fail (access_token != NULL, NULL);
+
   return GFBGRAPH_SIMPLE_AUTHORIZER (g_object_new (GFBGRAPH_TYPE_SIMPLE_AUTHORIZER,
                                                    "access-token", access_token,
                                                    NULL));
