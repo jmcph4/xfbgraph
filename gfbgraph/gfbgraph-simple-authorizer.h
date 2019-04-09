@@ -35,15 +35,17 @@ typedef struct _GFBGraphSimpleAuthorizer        GFBGraphSimpleAuthorizer;
 typedef struct _GFBGraphSimpleAuthorizerClass   GFBGraphSimpleAuthorizerClass;
 typedef struct _GFBGraphSimpleAuthorizerPrivate GFBGraphSimpleAuthorizerPrivate;
 
-struct _GFBGraphSimpleAuthorizer {
-        GObject parent;
+struct _GFBGraphSimpleAuthorizer
+{
+  GObject parent;
 
-        /*< private >*/
-        GFBGraphSimpleAuthorizerPrivate *priv;
+  /*< private >*/
+  GFBGraphSimpleAuthorizerPrivate *priv;
 };
 
-struct _GFBGraphSimpleAuthorizerClass {
-        GObjectClass parent_class;
+struct _GFBGraphSimpleAuthorizerClass
+{
+  GObjectClass parent_class;
 };
 
 GType                     gfbgraph_simple_authorizer_get_type (void) G_GNUC_CONST;
