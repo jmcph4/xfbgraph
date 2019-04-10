@@ -1,4 +1,4 @@
-/* -*- Mode: C; indent-tabs-mode: nil; c-basic-offset: 8; tab-width: 8 -*-  */
+/* -*- Mode: C; indent-tabs-mode: nil; c-basic-offset: 2; tab-width: 2 -*-  */
 /*
  * libgfbgraph - GObject library for Facebook Graph API
  * Copyright (C) 2013 Álvaro Peña <alvaropg@gmail.com>
@@ -40,34 +40,41 @@ typedef struct _GFBGraphNodePrivate GFBGraphNodePrivate;
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (GFBGraphNode, g_object_unref)
 
-struct _GFBGraphNode {
-        GObject parent;
+struct _GFBGraphNode
+{
+  GObject parent;
 
-        /*< private >*/
-        GFBGraphNodePrivate *priv;
+  /*< private >*/
+  GFBGraphNodePrivate *priv;
 };
 
-struct _GFBGraphNodeClass {
-        GObjectClass parent_class;
+struct _GFBGraphNodeClass
+{
+  GObjectClass parent_class;
 };
 
-typedef enum {
-        GFBGRAPH_NODE_ERROR_NO_CONNECTIONABLE = 1,
-        GFBGRAPH_NODE_ERROR_NO_CONNECTABLE
+typedef enum
+{
+  GFBGRAPH_NODE_ERROR_NO_CONNECTIONABLE = 1,
+  GFBGRAPH_NODE_ERROR_NO_CONNECTABLE
 } GFBGraphNodeError;
 
 GType          gfbgraph_node_get_type    (void) G_GNUC_CONST;
 GQuark         gfbgraph_node_error_quark (void) G_GNUC_CONST;
 GFBGraphNode*  gfbgraph_node_new         (void);
 
-GFBGraphNode*  gfbgraph_node_new_from_id (GFBGraphAuthorizer *authorizer, const gchar *id, GType node_type, GError **error);
+GFBGraphNode*  gfbgraph_node_new_from_id (GFBGraphAuthorizer  *authorizer,
+                                          const gchar         *id,
+                                          GType                node_type,
+                                          GError             **error);
 
 const gchar*   gfbgraph_node_get_id           (GFBGraphNode *node);
 const gchar*   gfbgraph_node_get_link         (GFBGraphNode *node);
 const gchar*   gfbgraph_node_get_created_time (GFBGraphNode *node);
 const gchar*   gfbgraph_node_get_updated_time (GFBGraphNode *node);
 
-void           gfbgraph_node_set_id           (GFBGraphNode *node, const gchar *id);
+void           gfbgraph_node_set_id           (GFBGraphNode *node,
+                                               const gchar  *id);
 
 GList*         gfbgraph_node_get_connection_nodes              (GFBGraphNode         *node,
                                                                 GType                 node_type,
@@ -83,7 +90,10 @@ GList*         gfbgraph_node_get_connection_nodes_async_finish (GFBGraphNode    
                                                                 GAsyncResult         *result,
                                                                 GError              **error);
 
-gboolean       gfbgraph_node_append_connection (GFBGraphNode *node, GFBGraphNode *connect_node, GFBGraphAuthorizer *authorizer, GError **error);
+gboolean       gfbgraph_node_append_connection (GFBGraphNode        *node,
+                                                GFBGraphNode        *connect_node,
+                                                GFBGraphAuthorizer  *authorizer,
+                                                GError             **error);
 
 G_END_DECLS
 
