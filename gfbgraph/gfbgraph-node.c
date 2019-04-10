@@ -130,7 +130,7 @@ gfbgraph_node_class_init (GFBGraphNodeClass *klass)
     * The time the node was initially published. Is an ISO 8601 encoded date.
     **/
   properties [PROP_CREATEDTIME] =
-    g_param_spec_string ("created_time",
+    g_param_spec_string ("created-time",
                          "The node creation time",
                          "An ISO 8601 encoded date when the node was initially published",
                          NULL,
@@ -142,7 +142,7 @@ gfbgraph_node_class_init (GFBGraphNodeClass *klass)
     * The last time the node was updated. Is an ISO 8601 encoded date.
     **/
   properties [PROP_UPDATEDTIME] =
-    g_param_spec_string ("updated_time",
+    g_param_spec_string ("updated-time",
                          "The node updated time",
                          "An ISO 8601 encoded date when the node was updated",
                          NULL,
