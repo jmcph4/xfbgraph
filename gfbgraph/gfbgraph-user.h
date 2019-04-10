@@ -1,4 +1,4 @@
-/* -*- Mode: C; indent-tabs-mode: nil; c-basic-offset: 8; tab-width: 8 -*-  */
+/* -*- Mode: C; indent-tabs-mode: nil; c-basic-offset: 2; tab-width: 2 -*-  */
 /*
  * libgfbgraph - GObject library for Facebook Graph API
  * Copyright (C) 2013-2014 Álvaro Peña <alvaropg@gmail.com>
@@ -40,28 +40,46 @@ typedef struct _GFBGraphUserPrivate         GFBGraphUserPrivate;
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (GFBGraphUser, g_object_unref)
 
-struct _GFBGraphUser {
-        GFBGraphNode parent;
+struct _GFBGraphUser
+{
+  GFBGraphNode parent;
 
-        /*< private >*/
-        GFBGraphUserPrivate *priv;
+  /*< private >*/
+  GFBGraphUserPrivate *priv;
 };
 
-struct _GFBGraphUserClass {
-        GFBGraphNodeClass parent_class;
+struct _GFBGraphUserClass
+{
+  GFBGraphNodeClass parent_class;
 };
 
 GType         gfbgraph_user_get_type  (void) G_GNUC_CONST;
 GFBGraphUser* gfbgraph_user_new       (void);
-GFBGraphUser* gfbgraph_user_new_from_id (GFBGraphAuthorizer *authorizer, const gchar *id, GError **error);
+GFBGraphUser* gfbgraph_user_new_from_id (GFBGraphAuthorizer  *authorizer,
+                                         const gchar         *id,
+                                         GError             **error);
 
-GFBGraphUser* gfbgraph_user_get_me              (GFBGraphAuthorizer *authorizer, GError **error);
-void          gfbgraph_user_get_me_async        (GFBGraphAuthorizer *authorizer, GCancellable *cancellable, GAsyncReadyCallback callback, gpointer user_data);
-GFBGraphUser* gfbgraph_user_get_me_async_finish (GFBGraphAuthorizer *authorizer, GAsyncResult *result, GError **error);
+GFBGraphUser* gfbgraph_user_get_me              (GFBGraphAuthorizer  *authorizer,
+                                                 GError             **error);
+void          gfbgraph_user_get_me_async        (GFBGraphAuthorizer  *authorizer,
+                                                 GCancellable        *cancellable,
+                                                 GAsyncReadyCallback  callback,
+                                                 gpointer             user_data);
+GFBGraphUser* gfbgraph_user_get_me_async_finish (GFBGraphAuthorizer  *authorizer,
+                                                 GAsyncResult        *result,
+                                                 GError             **error);
 
-GList*        gfbgraph_user_get_albums              (GFBGraphUser *user, GFBGraphAuthorizer *authorizer, GError **error);
-void          gfbgraph_user_get_albums_async        (GFBGraphUser *user, GFBGraphAuthorizer *authorizer, GCancellable *cancellable, GAsyncReadyCallback callback, gpointer user_data);
-GList*        gfbgraph_user_get_albums_async_finish (GFBGraphUser *user, GAsyncResult *result, GError **error);
+GList*        gfbgraph_user_get_albums              (GFBGraphUser        *user,
+                                                     GFBGraphAuthorizer  *authorizer,
+                                                     GError             **error);
+void          gfbgraph_user_get_albums_async        (GFBGraphUser        *user,
+                                                     GFBGraphAuthorizer  *authorizer,
+                                                     GCancellable        *cancellable,
+                                                     GAsyncReadyCallback  callback,
+                                                     gpointer             user_data);
+GList*        gfbgraph_user_get_albums_async_finish (GFBGraphUser  *user,
+                                                     GAsyncResult  *result,
+                                                     GError       **error);
 
 const gchar*  gfbgraph_user_get_name  (GFBGraphUser *user);
 const gchar*  gfbgraph_user_get_email (GFBGraphUser *user);
