@@ -39,16 +39,6 @@
 #include "gfbgraph-connectable.h"
 #include "gfbgraph-node.h"
 
-enum
-{
-  PROP_0,
-
-  PROP_ID,
-  PROP_LINK,
-  PROP_CREATEDTIME,
-  PROP_UPDATEDTIME
-};
-
 struct _GFBGraphNodePrivate
 {
   GList *connections;
@@ -86,6 +76,17 @@ static GObjectClass *parent_class = NULL;
 
 G_DEFINE_TYPE (GFBGraphNode, gfbgraph_node, G_TYPE_OBJECT);
 
+enum {
+  PROP_0,
+  PROP_ID,
+  PROP_LINK,
+  PROP_CREATEDTIME,
+  PROP_UPDATEDTIME,
+  N_PROPERTIES
+};
+
+static GParamSpec *properties [N_PROPERTIES];
+
 static void
 gfbgraph_node_class_init (GFBGraphNodeClass *klass)
 {
@@ -104,52 +105,50 @@ gfbgraph_node_class_init (GFBGraphNodeClass *klass)
     *
     * The node ID. All nodes have one of this.
     **/
-  g_object_class_install_property (gobject_class,
-                                   PROP_ID,
-                                   g_param_spec_string ("id",
-                                                        "The Facebook node ID",
-                                                        "Every node in the Facebook Graph is identified by his ID",
-                                                        "",
-                                                        G_PARAM_READABLE | G_PARAM_WRITABLE));
+  properties [PROP_ID] =
+    g_param_spec_string ("id",
+                         "The Facebook node ID",
+                         "Every node in the Facebook Graph is identified by his ID",
+                         NULL,
+                         G_PARAM_READWRITE);
 
   /**
     * GFBGraphNode:link:
     *
     * The node link. An URL to the node on Facebook.
     **/
-  g_object_class_install_property (gobject_class,
-                                   PROP_LINK,
-                                   g_param_spec_string ("link",
-                                                        "The link to the node",
-                                                        "A link (url) to the node on Facebook",
-                                                        "",
-                                                        G_PARAM_READABLE | G_PARAM_WRITABLE));
+  properties [PROP_LINK] =
+    g_param_spec_string ("link",
+                         "The link to the node",
+                         "A link (url) to the node on Facebook",
+                         NULL,
+                         G_PARAM_READWRITE);
 
   /**
     * GFBGraphNode:created_time:
     *
     * The time the node was initially published. Is an ISO 8601 encoded date.
     **/
-  g_object_class_install_property (gobject_class,
-                                   PROP_CREATEDTIME,
-                                   g_param_spec_string ("created_time",
-                                                        "The node creation time",
-                                                        "An ISO 8601 encoded date when the node was initially published",
-                                                        "",
-                                                        G_PARAM_READABLE | G_PARAM_WRITABLE));
+  properties [PROP_CREATEDTIME] =
+    g_param_spec_string ("created_time",
+                         "The node creation time",
+                         "An ISO 8601 encoded date when the node was initially published",
+                         NULL,
+                         G_PARAM_READWRITE);
 
   /**
     * GFBGraphNode:updated_time:
     *
     * The last time the node was updated. Is an ISO 8601 encoded date.
     **/
-  g_object_class_install_property (gobject_class,
-                                   PROP_UPDATEDTIME,
-                                   g_param_spec_string ("updated_time",
-                                                        "The node updated time",
-                                                        "An ISO 8601 encoded date when the node was updated",
-                                                        "",
-                                                        G_PARAM_READABLE | G_PARAM_WRITABLE));
+  properties [PROP_UPDATEDTIME] =
+    g_param_spec_string ("updated_time",
+                         "The node updated time",
+                         "An ISO 8601 encoded date when the node was updated",
+                         NULL,
+                         G_PARAM_READWRITE);
+
+  g_object_class_install_properties (gobject_class, N_PROPERTIES, properties);
 }
 
 static void
