@@ -336,9 +336,13 @@ gfbgraph_node_new_from_id (GFBGraphAuthorizer  *authorizer,
 const gchar*
 gfbgraph_node_get_id (GFBGraphNode *node)
 {
+  GFBGraphNodePrivate *priv;
+
   g_return_val_if_fail (GFBGRAPH_IS_NODE (node), NULL);
 
-  return node->priv->id;
+  priv = GFBGRAPH_NODE_GET_PRIVATE (node);
+
+  return priv->id;
 }
 
 /**
@@ -352,9 +356,13 @@ gfbgraph_node_get_id (GFBGraphNode *node)
 const gchar*
 gfbgraph_node_get_link (GFBGraphNode *node)
 {
+  GFBGraphNodePrivate *priv;
+
   g_return_val_if_fail (GFBGRAPH_IS_NODE (node), NULL);
 
-  return node->priv->link;
+  priv = GFBGRAPH_NODE_GET_PRIVATE (node);
+
+  return priv->link;
 }
 
 /**
@@ -368,9 +376,13 @@ gfbgraph_node_get_link (GFBGraphNode *node)
 const gchar*
 gfbgraph_node_get_created_time (GFBGraphNode *node)
 {
+  GFBGraphNodePrivate *priv;
+
   g_return_val_if_fail (GFBGRAPH_IS_NODE (node), NULL);
 
-  return node->priv->created_time;
+  priv = GFBGRAPH_NODE_GET_PRIVATE (node);
+
+  return priv->created_time;
 }
 
 /**
@@ -384,9 +396,13 @@ gfbgraph_node_get_created_time (GFBGraphNode *node)
 const gchar*
 gfbgraph_node_get_updated_time (GFBGraphNode *node)
 {
+  GFBGraphNodePrivate *priv;
+
   g_return_val_if_fail (GFBGRAPH_IS_NODE (node), NULL);
 
-  return node->priv->updated_time;
+  priv = GFBGRAPH_NODE_GET_PRIVATE (node);
+
+  return priv->updated_time;
 }
 
 /**
