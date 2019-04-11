@@ -262,12 +262,18 @@ main (int argc, char **argv)
                     gfbgraph_test_me,
                     gfbgraph_test_fixture_teardown);
 
+#if 0
+        /* It doesn't work by the policy change of Facebook Graph API
+         *
+         * See https://developers.facebook.com/docs/graph-api/reference/user/albums#Creating
+         */
         g_test_add ("/GFBGraph/Album",
                     GFBGraphTestFixture,
                     app,
                     gfbgraph_test_fixture_setup,
                     gfbgraph_test_album,
                     gfbgraph_test_fixture_teardown);
+#endif
 
         test_result = g_test_run ();
 
