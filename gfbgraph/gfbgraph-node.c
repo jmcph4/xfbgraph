@@ -72,8 +72,6 @@ static void gfbgraph_node_get_connection_nodes_async_thread (GSimpleAsyncResult 
 
 #define GFBGRAPH_NODE_GET_PRIVATE(_obj) gfbgraph_node_get_instance_private (GFBGRAPH_NODE (_obj))
 
-static GObjectClass *parent_class = NULL;
-
 G_DEFINE_TYPE_WITH_PRIVATE (GFBGraphNode, gfbgraph_node, G_TYPE_OBJECT)
 
 enum {
@@ -91,8 +89,6 @@ static void
 gfbgraph_node_class_init (GFBGraphNodeClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
-
-  parent_class            = g_type_class_peek_parent (klass);
 
   gobject_class->finalize = gfbgraph_node_finalize;
   gobject_class->set_property = gfbgraph_node_set_property;
@@ -168,7 +164,7 @@ gfbgraph_node_finalize (GObject *object)
   if (priv->updated_time)
     g_free (priv->updated_time);
 
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (gfbgraph_node_parent_class)->finalize (object);
 }
 
 static void
