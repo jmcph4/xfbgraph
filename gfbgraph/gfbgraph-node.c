@@ -55,21 +55,6 @@ typedef struct
   GFBGraphAuthorizer *authorizer;
 } GFBGraphNodeConnectionAsyncData;
 
-GQuark
-gfbgraph_node_error_quark (void)
-{
-  return g_quark_from_static_string ("gfbgraph-node-error-quark");
-}
-
-static void gfbgraph_node_init         (GFBGraphNode *obj);
-static void gfbgraph_node_class_init   (GFBGraphNodeClass *klass);
-static void gfbgraph_node_finalize     (GObject *object);
-static void gfbgraph_node_set_property (GObject *object, guint prop_id, const GValue *value, GParamSpec *pspec);
-static void gfbgraph_node_get_property (GObject *object, guint prop_id, GValue *value, GParamSpec *pspec);
-
-static void gfbgraph_node_connection_async_data_free (GFBGraphNodeConnectionAsyncData *data);
-static void gfbgraph_node_get_connection_nodes_async_thread (GSimpleAsyncResult *simple_async, GFBGraphNode *node, GCancellable cancellable);
-
 #define GFBGRAPH_NODE_GET_PRIVATE(_obj) gfbgraph_node_get_instance_private (GFBGRAPH_NODE (_obj))
 
 G_DEFINE_TYPE_WITH_PRIVATE (GFBGraphNode, gfbgraph_node, G_TYPE_OBJECT)
@@ -84,6 +69,23 @@ enum {
 };
 
 static GParamSpec *properties [N_PROPERTIES];
+
+/* Forward declarations */
+static void gfbgraph_node_init         (GFBGraphNode *obj);
+static void gfbgraph_node_class_init   (GFBGraphNodeClass *klass);
+static void gfbgraph_node_finalize     (GObject *object);
+static void gfbgraph_node_set_property (GObject *object, guint prop_id, const GValue *value, GParamSpec *pspec);
+static void gfbgraph_node_get_property (GObject *object, guint prop_id, GValue *value, GParamSpec *pspec);
+
+static void gfbgraph_node_connection_async_data_free (GFBGraphNodeConnectionAsyncData *data);
+static void gfbgraph_node_get_connection_nodes_async_thread (GSimpleAsyncResult *simple_async, GFBGraphNode *node, GCancellable cancellable);
+
+
+GQuark
+gfbgraph_node_error_quark (void)
+{
+  return g_quark_from_static_string ("gfbgraph-node-error-quark");
+}
 
 static void
 gfbgraph_node_class_init (GFBGraphNodeClass *klass)
