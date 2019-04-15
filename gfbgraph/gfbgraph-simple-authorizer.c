@@ -57,8 +57,6 @@ gboolean gfbgraph_simple_authorizer_refresh_authorization (GFBGraphAuthorizer *i
 
 #define GFBGRAPH_SIMPLE_AUTHORIZER_GET_PRIVATE(_obj) gfbgraph_simple_authorizer_get_instance_private (GFBGRAPH_SIMPLE_AUTHORIZER (_obj))
 
-static GObjectClass *parent_class = NULL;
-
 G_DEFINE_TYPE_WITH_CODE (GFBGraphSimpleAuthorizer, gfbgraph_simple_authorizer, G_TYPE_OBJECT,
                          G_ADD_PRIVATE (GFBGraphSimpleAuthorizer)
                          G_IMPLEMENT_INTERFACE (GFBGRAPH_TYPE_AUTHORIZER, gfbgraph_simple_authorizer_iface_init));
@@ -76,7 +74,6 @@ gfbgraph_simple_authorizer_class_init (GFBGraphSimpleAuthorizerClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
-  parent_class            = g_type_class_peek_parent (klass);
   gobject_class->finalize = gfbgraph_simple_authorizer_finalize;
   gobject_class->set_property = gfbgraph_simple_authorizer_set_property;
   gobject_class->get_property = gfbgraph_simple_authorizer_get_property;
@@ -98,7 +95,7 @@ gfbgraph_simple_authorizer_class_init (GFBGraphSimpleAuthorizerClass *klass)
 static void
 gfbgraph_simple_authorizer_finalize (GObject *obj)
 {
-  G_OBJECT_CLASS(parent_class)->finalize (obj);
+  G_OBJECT_CLASS (gfbgraph_simple_authorizer_parent_class)->finalize (obj);
 }
 
 static void
