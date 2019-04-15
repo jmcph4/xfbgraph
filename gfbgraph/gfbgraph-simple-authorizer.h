@@ -1,4 +1,4 @@
-/* -*- Mode: C; indent-tabs-mode: nil; c-basic-offset: 8; tab-width: 8 -*-  */
+/* -*- Mode: C; indent-tabs-mode: nil; c-basic-offset: 2; tab-width: 2 -*-  */
 /*
  * libgfbgraph - GObject library for Facebook Graph API
  * Copyright (C) 2013 Álvaro Peña <alvaropg@gmail.com>
