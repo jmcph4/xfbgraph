@@ -22,33 +22,20 @@
 
 #include <glib-object.h>
 
+#include "gfbgraph-macro.h"
+
 G_BEGIN_DECLS
 
-#define GFBGRAPH_TYPE_SIMPLE_AUTHORIZER             (gfbgraph_simple_authorizer_get_type())
-#define GFBGRAPH_SIMPLE_AUTHORIZER(obj)             (G_TYPE_CHECK_INSTANCE_CAST((obj),GFBGRAPH_TYPE_SIMPLE_AUTHORIZER,GFBGraphSimpleAuthorizer))
-#define GFBGRAPH_SIMPLE_AUTHORIZER_CLASS(klass)     (G_TYPE_CHECK_CLASS_CAST((klass),GFBGRAPH_TYPE_SIMPLE_AUTHORIZER,GFBGraphSimpleAuthorizerClass))
-#define GFBGRAPH_IS_SIMPLE_AUTHORIZER(obj)          (G_TYPE_CHECK_INSTANCE_TYPE((obj),GFBGRAPH_TYPE_SIMPLE_AUTHORIZER))
-#define GFBGRAPH_IS_SIMPLE_AUTHORIZER_CLASS(klass)  (G_TYPE_CHECK_CLASS_TYPE((klass),GFBGRAPH_TYPE_SIMPLE_AUTHORIZER))
-#define GFBGRAPH_SIMPLE_AUTHORIZER_GET_CLASS(obj)   (G_TYPE_INSTANCE_GET_CLASS((obj),GFBGRAPH_TYPE_SIMPLE_AUTHORIZER,GFBGraphSimpleAuthorizerClass))
-
-typedef struct _GFBGraphSimpleAuthorizer        GFBGraphSimpleAuthorizer;
-typedef struct _GFBGraphSimpleAuthorizerClass   GFBGraphSimpleAuthorizerClass;
-typedef struct _GFBGraphSimpleAuthorizerPrivate GFBGraphSimpleAuthorizerPrivate;
-
-struct _GFBGraphSimpleAuthorizer
-{
-  GObject parent;
-
-  /*< private >*/
-  GFBGraphSimpleAuthorizerPrivate *priv;
-};
+#define GFBGRAPH_TYPE_SIMPLE_AUTHORIZER (gfbgraph_simple_authorizer_get_type())
+G_DECLARE_DERIVABLE_TYPE (GFBGraphSimpleAuthorizer, gfbgraph_simple_authorizer, GFBGRAPH, SIMPLE_AUTHORIZER, GObject)
 
 struct _GFBGraphSimpleAuthorizerClass
 {
-  GObjectClass parent_class;
+  GObjectClass  parent_class;
+
+  gpointer      _reserved[GFBGRAPH_PADDING];
 };
 
-GType                     gfbgraph_simple_authorizer_get_type (void) G_GNUC_CONST;
 GFBGraphSimpleAuthorizer* gfbgraph_simple_authorizer_new      (const gchar *access_token);
 
 G_END_DECLS

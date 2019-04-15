@@ -37,11 +37,11 @@ enum
   PROP_ACCESS_TOKEN
 };
 
-struct _GFBGraphSimpleAuthorizerPrivate
+typedef struct
 {
   GMutex mutex;
   gchar *access_token;
-};
+} GFBGraphSimpleAuthorizerPrivate;
 
 static void gfbgraph_simple_authorizer_init         (GFBGraphSimpleAuthorizer *obj);
 static void gfbgraph_simple_authorizer_class_init   (GFBGraphSimpleAuthorizerClass *klass);
@@ -55,19 +55,20 @@ void     gfbgraph_simple_authorizer_process_call          (GFBGraphAuthorizer *i
 void     gfbgraph_simple_authorizer_process_message       (GFBGraphAuthorizer *iface, SoupMessage *message);
 gboolean gfbgraph_simple_authorizer_refresh_authorization (GFBGraphAuthorizer *iface, GCancellable *cancellable, GError **error);
 
-#define GFBGRAPH_SIMPLE_AUTHORIZER_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE((o), GFBGRAPH_TYPE_SIMPLE_AUTHORIZER, GFBGraphSimpleAuthorizerPrivate))
+#define GFBGRAPH_SIMPLE_AUTHORIZER_GET_PRIVATE(_obj) gfbgraph_simple_authorizer_get_instance_private (GFBGRAPH_SIMPLE_AUTHORIZER (_obj))
 
 static GObjectClass *parent_class = NULL;
 
 G_DEFINE_TYPE_WITH_CODE (GFBGraphSimpleAuthorizer, gfbgraph_simple_authorizer, G_TYPE_OBJECT,
+                         G_ADD_PRIVATE (GFBGraphSimpleAuthorizer)
                          G_IMPLEMENT_INTERFACE (GFBGRAPH_TYPE_AUTHORIZER, gfbgraph_simple_authorizer_iface_init));
 
 
 static void
 gfbgraph_simple_authorizer_init (GFBGraphSimpleAuthorizer *obj)
 {
-  obj->priv = GFBGRAPH_SIMPLE_AUTHORIZER_GET_PRIVATE(obj);
-  g_mutex_init (&obj->priv->mutex);
+  GFBGraphSimpleAuthorizerPrivate *priv = GFBGRAPH_SIMPLE_AUTHORIZER_GET_PRIVATE (obj);
+  g_mutex_init (&priv->mutex);
 }
 
 static void
@@ -79,8 +80,6 @@ gfbgraph_simple_authorizer_class_init (GFBGraphSimpleAuthorizerClass *klass)
   gobject_class->finalize = gfbgraph_simple_authorizer_finalize;
   gobject_class->set_property = gfbgraph_simple_authorizer_set_property;
   gobject_class->get_property = gfbgraph_simple_authorizer_get_property;
-
-  g_type_class_add_private (gobject_class, sizeof(GFBGraphSimpleAuthorizerPrivate));
 
   /**
    * GFBGraphSimpleAuthorizer:access_token:
