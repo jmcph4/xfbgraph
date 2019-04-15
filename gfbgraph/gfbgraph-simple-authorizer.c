@@ -95,6 +95,10 @@ gfbgraph_simple_authorizer_class_init (GFBGraphSimpleAuthorizerClass *klass)
 static void
 gfbgraph_simple_authorizer_finalize (GObject *obj)
 {
+  GFBGraphSimpleAuthorizerPrivate *priv = GFBGRAPH_SIMPLE_AUTHORIZER_GET_PRIVATE (obj);
+
+  g_free (priv->access_token);
+
   G_OBJECT_CLASS (gfbgraph_simple_authorizer_parent_class)->finalize (obj);
 }
 
