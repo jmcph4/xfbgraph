@@ -120,6 +120,15 @@ gfbgraph_user_class_init (GFBGraphUserClass *klass)
 static void
 gfbgraph_user_finalize (GObject *obj)
 {
+        GFBGraphUserPrivate *priv;
+
+        priv = GFBGRAPH_USER_GET_PRIVATE (obj);
+
+        if (priv->name)
+                g_free (priv->name);
+        if (priv->email)
+                g_free (priv->email);
+
         G_OBJECT_CLASS(parent_class)->finalize (obj);
 }
 
