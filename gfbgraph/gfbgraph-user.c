@@ -35,13 +35,6 @@
 
 #define ME_FUNCTION "me"
 
-enum {
-  PROP_0,
-
-  PROP_NAME,
-  PROP_EMAIL
-};
-
 typedef struct
 {
   gchar *name;
@@ -75,6 +68,18 @@ static void gfbgraph_user_get_albums_async_thread (GSimpleAsyncResult *simple_as
 
 G_DEFINE_TYPE_WITH_PRIVATE (GFBGraphUser, gfbgraph_user, GFBGRAPH_TYPE_NODE);
 
+/* Properties */
+enum {
+  PROP_0,
+  PROP_NAME,
+  PROP_EMAIL,
+  N_PROPERTIES
+};
+
+static GParamSpec* properties [N_PROPERTIES];
+
+
+/* --- GObject --- */
 static void
 gfbgraph_user_init (GFBGraphUser *obj)
 {
@@ -94,24 +99,24 @@ gfbgraph_user_class_init (GFBGraphUserClass *klass)
    *
    * The full name of the user
    **/
-  g_object_class_install_property (gobject_class,
-                                   PROP_NAME,
-                                   g_param_spec_string ("name",
-                                                        "User's full name", "The full name of the user",
-                                                        "",
-                                                        G_PARAM_READABLE | G_PARAM_WRITABLE));
+  properties [PROP_NAME] =
+    g_param_spec_string ("name", "User's full name",
+                         "The full name of the user",
+                         NULL,
+                         G_PARAM_READWRITE);
 
   /**
    * GFBGraphUser:email:
    *
    * The email of the user if available
    **/
-  g_object_class_install_property (gobject_class,
-                                   PROP_EMAIL,
-                                   g_param_spec_string ("email",
-                                                        "User's email", "The user primary email if available",
-                                                        NULL,
-                                                        G_PARAM_READABLE | G_PARAM_WRITABLE));
+  properties [PROP_EMAIL] =
+    g_param_spec_string ("email", "User's email",
+                         "The user primary email if available",
+                         NULL,
+                         G_PARAM_READWRITE);
+
+  g_object_class_install_properties (gobject_class, N_PROPERTIES, properties);
 }
 
 static void
