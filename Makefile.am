@@ -1,9 +1,11 @@
 SUBDIRS = gfbgraph docs tests
 ACLOCAL_AMFLAGS = -I m4
 
+AUTOMAKE_OPTIONS = foreign
+
 libgfbgraphdocdir = ${prefix}/doc/libgfbgraph
 libgfbgraphdoc_DATA = \
-	README\
+	README.md\
 	COPYING\
 	AUTHORS\
 	ChangeLog\
