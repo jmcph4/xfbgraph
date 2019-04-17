@@ -45,54 +45,15 @@ G_DEFINE_TYPE_WITH_CODE (GFBGraphSimpleAuthorizer, gfbgraph_simple_authorizer, G
                          G_ADD_PRIVATE (GFBGraphSimpleAuthorizer)
                          G_IMPLEMENT_INTERFACE (GFBGRAPH_TYPE_AUTHORIZER, gfbgraph_simple_authorizer_iface_init));
 
+/* Properties */
 enum
 {
   PROP_0,
   PROP_ACCESS_TOKEN
 };
 
-/* Forward declarations */
-static void gfbgraph_simple_authorizer_init         (GFBGraphSimpleAuthorizer *obj);
-static void gfbgraph_simple_authorizer_class_init   (GFBGraphSimpleAuthorizerClass *klass);
-static void gfbgraph_simple_authorizer_finalize     (GObject *obj);
-static void gfbgraph_simple_authorizer_set_property (GObject *object, guint prop_id, const GValue *value, GParamSpec *pspec);
-static void gfbgraph_simple_authorizer_get_property (GObject *object, guint prop_id, GValue *value, GParamSpec *pspec);
 
-void     gfbgraph_simple_authorizer_process_call          (GFBGraphAuthorizer *iface, RestProxyCall *call);
-void     gfbgraph_simple_authorizer_process_message       (GFBGraphAuthorizer *iface, SoupMessage *message);
-gboolean gfbgraph_simple_authorizer_refresh_authorization (GFBGraphAuthorizer *iface, GCancellable *cancellable, GError **error);
-
-
-static void
-gfbgraph_simple_authorizer_init (GFBGraphSimpleAuthorizer *obj)
-{
-  GFBGraphSimpleAuthorizerPrivate *priv = GFBGRAPH_SIMPLE_AUTHORIZER_GET_PRIVATE (obj);
-  g_mutex_init (&priv->mutex);
-}
-
-static void
-gfbgraph_simple_authorizer_class_init (GFBGraphSimpleAuthorizerClass *klass)
-{
-  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
-
-  gobject_class->finalize = gfbgraph_simple_authorizer_finalize;
-  gobject_class->set_property = gfbgraph_simple_authorizer_set_property;
-  gobject_class->get_property = gfbgraph_simple_authorizer_get_property;
-
-  /**
-   * GFBGraphSimpleAuthorizer:access_token:
-   *
-   * The access token for the Facebook Graph API, normally, take it by hand in the
-   * Graph API explorer tool: https://developers.facebook.com/tools/explorer.
-   **/
-  g_object_class_install_property (gobject_class,
-                                   PROP_ACCESS_TOKEN,
-                                   g_param_spec_string ("access-token", "The access token",
-                                                        "The access token for the Facebook Graph API.",
-                                                        NULL,
-                                                        G_PARAM_READABLE | G_PARAM_WRITABLE));
-}
-
+/* --- GObject --- */
 static void
 gfbgraph_simple_authorizer_finalize (GObject *obj)
 {
@@ -144,14 +105,37 @@ gfbgraph_simple_authorizer_get_property (GObject    *object,
 }
 
 static void
-gfbgraph_simple_authorizer_iface_init (GFBGraphAuthorizerInterface *iface)
+gfbgraph_simple_authorizer_init (GFBGraphSimpleAuthorizer *obj)
 {
-  iface->process_call = gfbgraph_simple_authorizer_process_call;
-  iface->process_message = gfbgraph_simple_authorizer_process_message;
-  iface->refresh_authorization = gfbgraph_simple_authorizer_refresh_authorization;
+  GFBGraphSimpleAuthorizerPrivate *priv = GFBGRAPH_SIMPLE_AUTHORIZER_GET_PRIVATE (obj);
+  g_mutex_init (&priv->mutex);
 }
 
-void
+static void
+gfbgraph_simple_authorizer_class_init (GFBGraphSimpleAuthorizerClass *klass)
+{
+  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+
+  gobject_class->finalize = gfbgraph_simple_authorizer_finalize;
+  gobject_class->set_property = gfbgraph_simple_authorizer_set_property;
+  gobject_class->get_property = gfbgraph_simple_authorizer_get_property;
+
+  /**
+   * GFBGraphSimpleAuthorizer:access_token:
+   *
+   * The access token for the Facebook Graph API, normally, take it by hand in the
+   * Graph API explorer tool: https://developers.facebook.com/tools/explorer.
+   **/
+  g_object_class_install_property (gobject_class,
+                                   PROP_ACCESS_TOKEN,
+                                   g_param_spec_string ("access-token", "The access token",
+                                                        "The access token for the Facebook Graph API.",
+                                                        NULL,
+                                                        G_PARAM_READABLE | G_PARAM_WRITABLE));
+}
+
+/* --- Internal methods --- */
+static void
 gfbgraph_simple_authorizer_process_call (GFBGraphAuthorizer *iface,
                                          RestProxyCall      *call)
 {
@@ -166,7 +150,7 @@ gfbgraph_simple_authorizer_process_call (GFBGraphAuthorizer *iface,
   g_mutex_unlock (&priv->mutex);
 }
 
-void
+static void
 gfbgraph_simple_authorizer_process_message (GFBGraphAuthorizer *iface,
                                             SoupMessage        *message)
 {
@@ -189,13 +173,23 @@ gfbgraph_simple_authorizer_process_message (GFBGraphAuthorizer *iface,
   g_mutex_unlock (&priv->mutex);
 }
 
-gboolean
+static gboolean
 gfbgraph_simple_authorizer_refresh_authorization (GFBGraphAuthorizer  *iface,
                                                   GCancellable        *cancellable,
                                                   GError             **error)
 {
   return FALSE;
 }
+
+static void
+gfbgraph_simple_authorizer_iface_init (GFBGraphAuthorizerInterface *iface)
+{
+  iface->process_call = gfbgraph_simple_authorizer_process_call;
+  iface->process_message = gfbgraph_simple_authorizer_process_message;
+  iface->refresh_authorization = gfbgraph_simple_authorizer_refresh_authorization;
+}
+
+/* --- Public APIs --- */
 
 /**
  * gfbgraph_simple_authorizer_new:
