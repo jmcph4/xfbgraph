@@ -52,20 +52,6 @@ typedef struct
   GList *nodes;
 } GFBGraphUserConnectionAsyncData;
 
-static void gfbgraph_user_init         (GFBGraphUser *obj);
-static void gfbgraph_user_class_init   (GFBGraphUserClass *klass);
-static void gfbgraph_user_finalize     (GObject *obj);
-static void gfbgraph_user_set_property (GObject *object, guint prop_id, const GValue *value, GParamSpec *pspec);
-static void gfbgraph_user_get_property (GObject *object, guint prop_id, GValue *value, GParamSpec *pspec);
-
-/* Private functions */
-static void gfbgraph_user_async_data_free (GFBGraphUserAsyncData *data);
-static void gfbgraph_user_connection_async_data_free (GFBGraphUserConnectionAsyncData *data);
-static void gfbgraph_user_get_me_async_thread (GSimpleAsyncResult *simple_async, GFBGraphAuthorizer *authorizer, GCancellable cancellable);
-static void gfbgraph_user_get_albums_async_thread (GSimpleAsyncResult *simple_async, GFBGraphUser *user, GCancellable cancellable);
-
-#define GFBGRAPH_USER_GET_PRIVATE(_obj) gfbgraph_user_get_instance_private (GFBGRAPH_USER (_obj))
-
 G_DEFINE_TYPE_WITH_PRIVATE (GFBGraphUser, gfbgraph_user, GFBGRAPH_TYPE_NODE);
 
 /* Properties */
@@ -78,47 +64,10 @@ enum {
 
 static GParamSpec* properties [N_PROPERTIES];
 
+#define GFBGRAPH_USER_GET_PRIVATE(_obj) gfbgraph_user_get_instance_private (GFBGRAPH_USER (_obj))
+
 
 /* --- GObject --- */
-static void
-gfbgraph_user_init (GFBGraphUser *obj)
-{
-}
-
-static void
-gfbgraph_user_class_init (GFBGraphUserClass *klass)
-{
-  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
-
-  gobject_class->finalize = gfbgraph_user_finalize;
-  gobject_class->set_property = gfbgraph_user_set_property;
-  gobject_class->get_property = gfbgraph_user_get_property;
-
-  /**
-   * GFBGraphUser:name:
-   *
-   * The full name of the user
-   **/
-  properties [PROP_NAME] =
-    g_param_spec_string ("name", "User's full name",
-                         "The full name of the user",
-                         NULL,
-                         G_PARAM_READWRITE);
-
-  /**
-   * GFBGraphUser:email:
-   *
-   * The email of the user if available
-   **/
-  properties [PROP_EMAIL] =
-    g_param_spec_string ("email", "User's email",
-                         "The user primary email if available",
-                         NULL,
-                         G_PARAM_READWRITE);
-
-  g_object_class_install_properties (gobject_class, N_PROPERTIES, properties);
-}
-
 static void
 gfbgraph_user_finalize (GObject *obj)
 {
@@ -179,6 +128,46 @@ gfbgraph_user_get_property (GObject    *object,
 }
 
 static void
+gfbgraph_user_init (GFBGraphUser *obj)
+{
+}
+
+static void
+gfbgraph_user_class_init (GFBGraphUserClass *klass)
+{
+  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+
+  gobject_class->finalize = gfbgraph_user_finalize;
+  gobject_class->set_property = gfbgraph_user_set_property;
+  gobject_class->get_property = gfbgraph_user_get_property;
+
+  /**
+   * GFBGraphUser:name:
+   *
+   * The full name of the user
+   **/
+  properties [PROP_NAME] =
+    g_param_spec_string ("name", "User's full name",
+                         "The full name of the user",
+                         NULL,
+                         G_PARAM_READWRITE);
+
+  /**
+   * GFBGraphUser:email:
+   *
+   * The email of the user if available
+   **/
+  properties [PROP_EMAIL] =
+    g_param_spec_string ("email", "User's email",
+                         "The user primary email if available",
+                         NULL,
+                         G_PARAM_READWRITE);
+
+  g_object_class_install_properties (gobject_class, N_PROPERTIES, properties);
+}
+
+/* --- Internal methods --- */
+static void
 gfbgraph_user_async_data_free (GFBGraphUserAsyncData *data)
 {
   g_object_unref (data->user);
@@ -223,6 +212,9 @@ gfbgraph_user_get_albums_async_thread (GSimpleAsyncResult *simple_async,
   if (error != NULL)
     g_simple_async_result_take_error (simple_async, error);
 }
+
+
+/* --- Public APIs --- */
 
 /**
  * gfbgraph_user_new:
