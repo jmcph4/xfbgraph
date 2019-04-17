@@ -143,7 +143,7 @@ gfbgraph_simple_authorizer_process_call (GFBGraphAuthorizer *iface,
 
   g_return_if_fail (GFBGRAPH_IS_SIMPLE_AUTHORIZER (iface));
 
-  priv = GFBGRAPH_SIMPLE_AUTHORIZER_GET_PRIVATE (GFBGRAPH_SIMPLE_AUTHORIZER (iface));
+  priv = GFBGRAPH_SIMPLE_AUTHORIZER_GET_PRIVATE (iface);
 
   g_mutex_lock (&priv->mutex);
   rest_proxy_call_add_param (call, "access_token", priv->access_token);
@@ -160,7 +160,7 @@ gfbgraph_simple_authorizer_process_message (GFBGraphAuthorizer *iface,
 
   g_return_if_fail (GFBGRAPH_IS_SIMPLE_AUTHORIZER (iface));
 
-  priv = GFBGRAPH_SIMPLE_AUTHORIZER_GET_PRIVATE (GFBGRAPH_SIMPLE_AUTHORIZER (iface));
+  priv = GFBGRAPH_SIMPLE_AUTHORIZER_GET_PRIVATE (iface);
 
   g_mutex_lock (&priv->mutex);
 
