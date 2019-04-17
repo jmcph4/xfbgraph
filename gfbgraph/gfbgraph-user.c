@@ -73,8 +73,6 @@ static void gfbgraph_user_get_albums_async_thread (GSimpleAsyncResult *simple_as
 
 #define GFBGRAPH_USER_GET_PRIVATE(_obj) gfbgraph_user_get_instance_private (GFBGRAPH_USER (_obj))
 
-static GFBGraphNodeClass *parent_class = NULL;
-
 G_DEFINE_TYPE_WITH_PRIVATE (GFBGraphUser, gfbgraph_user, GFBGRAPH_TYPE_NODE);
 
 static void
@@ -87,7 +85,6 @@ gfbgraph_user_class_init (GFBGraphUserClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
-  parent_class            = g_type_class_peek_parent (klass);
   gobject_class->finalize = gfbgraph_user_finalize;
   gobject_class->set_property = gfbgraph_user_set_property;
   gobject_class->get_property = gfbgraph_user_get_property;
@@ -125,7 +122,7 @@ gfbgraph_user_finalize (GObject *obj)
   g_free (priv->name);
   g_free (priv->email);
 
-  G_OBJECT_CLASS(parent_class)->finalize (obj);
+  G_OBJECT_CLASS (gfbgraph_user_parent_class)->finalize (obj);
 }
 
 static void
