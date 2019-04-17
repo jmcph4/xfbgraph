@@ -102,6 +102,10 @@ gfbgraph_goa_authorizer_init (GFBGraphGoaAuthorizer *object)
 static void
 gfbgraph_goa_authorizer_finalize (GObject *object)
 {
+        GFBGraphGoaAuthorizerPrivate *priv = GFBGRAPH_GOA_AUTHORIZER_GET_PRIVATE (object);
+
+        g_free (priv->access_token);
+
         G_OBJECT_CLASS(parent_class)->finalize (object);
 }
 
