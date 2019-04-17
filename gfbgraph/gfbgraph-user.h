@@ -27,33 +27,21 @@
 
 G_BEGIN_DECLS
 
-#define GFBGRAPH_TYPE_USER             (gfbgraph_user_get_type())
-#define GFBGRAPH_USER(obj)             (G_TYPE_CHECK_INSTANCE_CAST((obj),GFBGRAPH_TYPE_USER,GFBGraphUser))
-#define GFBGRAPH_USER_CLASS(klass)     (G_TYPE_CHECK_CLASS_CAST((klass),GFBGRAPH_TYPE_USER,GFBGraphUserClass))
-#define GFBGRAPH_IS_USER(obj)          (G_TYPE_CHECK_INSTANCE_TYPE((obj),GFBGRAPH_TYPE_USER))
-#define GFBGRAPH_IS_USER_CLASS(klass)  (G_TYPE_CHECK_CLASS_TYPE((klass),GFBGRAPH_TYPE_USER))
-#define GFBGRAPH_USER_GET_CLASS(obj)   (G_TYPE_INSTANCE_GET_CLASS((obj),GFBGRAPH_TYPE_USER,GFBGraphUserClass))
-
-typedef struct _GFBGraphUser      GFBGraphUser;
-typedef struct _GFBGraphUserClass GFBGraphUserClass;
-typedef struct _GFBGraphUserPrivate         GFBGraphUserPrivate;
-
-G_DEFINE_AUTOPTR_CLEANUP_FUNC (GFBGraphUser, g_object_unref)
-
-struct _GFBGraphUser
-{
-  GFBGraphNode parent;
-
-  /*< private >*/
-  GFBGraphUserPrivate *priv;
-};
+#define GFBGRAPH_TYPE_USER (gfbgraph_user_get_type())
+G_DECLARE_DERIVABLE_TYPE (GFBGraphUser, gfbgraph_user, GFBGRAPH, USER, GFBGraphNode)
 
 struct _GFBGraphUserClass
 {
   GFBGraphNodeClass parent_class;
+
+  gpointer  _reserved1;
+  gpointer  _reserved2;
+  gpointer  _reserved3;
+  gpointer  _reserved4;
+  gpointer  _reserved5;
+  gpointer  _reserved6;
 };
 
-GType         gfbgraph_user_get_type  (void) G_GNUC_CONST;
 GFBGraphUser* gfbgraph_user_new       (void);
 GFBGraphUser* gfbgraph_user_new_from_id (GFBGraphAuthorizer  *authorizer,
                                          const gchar         *id,

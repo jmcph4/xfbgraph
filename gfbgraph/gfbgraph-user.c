@@ -42,11 +42,11 @@ enum {
   PROP_EMAIL
 };
 
-struct _GFBGraphUserPrivate
+typedef struct
 {
   gchar *name;
   gchar *email;
-};
+} GFBGraphUserPrivate;
 
 typedef struct
 {
@@ -71,16 +71,15 @@ static void gfbgraph_user_connection_async_data_free (GFBGraphUserConnectionAsyn
 static void gfbgraph_user_get_me_async_thread (GSimpleAsyncResult *simple_async, GFBGraphAuthorizer *authorizer, GCancellable cancellable);
 static void gfbgraph_user_get_albums_async_thread (GSimpleAsyncResult *simple_async, GFBGraphUser *user, GCancellable cancellable);
 
-#define GFBGRAPH_USER_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE((o), GFBGRAPH_TYPE_USER, GFBGraphUserPrivate))
+#define GFBGRAPH_USER_GET_PRIVATE(_obj) gfbgraph_user_get_instance_private (GFBGRAPH_USER (_obj))
 
 static GFBGraphNodeClass *parent_class = NULL;
 
-G_DEFINE_TYPE (GFBGraphUser, gfbgraph_user, GFBGRAPH_TYPE_NODE);
+G_DEFINE_TYPE_WITH_PRIVATE (GFBGraphUser, gfbgraph_user, GFBGRAPH_TYPE_NODE);
 
 static void
 gfbgraph_user_init (GFBGraphUser *obj)
 {
-  obj->priv = GFBGRAPH_USER_GET_PRIVATE(obj);
 }
 
 static void
@@ -92,8 +91,6 @@ gfbgraph_user_class_init (GFBGraphUserClass *klass)
   gobject_class->finalize = gfbgraph_user_finalize;
   gobject_class->set_property = gfbgraph_user_set_property;
   gobject_class->get_property = gfbgraph_user_get_property;
-
-  g_type_class_add_private (gobject_class, sizeof(GFBGraphUserPrivate));
 
   /**
    * GFBGraphUser:name:
@@ -498,9 +495,13 @@ gfbgraph_user_get_albums_async_finish (GFBGraphUser  *user,
 const gchar*
 gfbgraph_user_get_name (GFBGraphUser *user)
 {
+  GFBGraphUserPrivate *priv;
+
   g_return_val_if_fail (GFBGRAPH_IS_USER (user), NULL);
 
-  return user->priv->name;
+  priv = GFBGRAPH_USER_GET_PRIVATE (user);
+
+  return priv->name;
 }
 
 /**
@@ -515,7 +516,11 @@ gfbgraph_user_get_name (GFBGraphUser *user)
 const gchar*
 gfbgraph_user_get_email (GFBGraphUser *user)
 {
+  GFBGraphUserPrivate *priv;
+
   g_return_val_if_fail (GFBGRAPH_IS_USER (user), NULL);
 
-  return user->priv->email;
+  priv = GFBGRAPH_USER_GET_PRIVATE (user);
+
+  return priv->email;
 }
