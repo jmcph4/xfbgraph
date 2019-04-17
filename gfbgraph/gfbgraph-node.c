@@ -157,14 +157,10 @@ gfbgraph_node_finalize (GObject *object)
 {
   GFBGraphNodePrivate *priv = GFBGRAPH_NODE_GET_PRIVATE (object);
 
-  if (priv->id)
-    g_free (priv->id);
-  if (priv->link)
-    g_free (priv->link);
-  if (priv->created_time)
-    g_free (priv->created_time);
-  if (priv->updated_time)
-    g_free (priv->updated_time);
+  g_free (priv->id);
+  g_free (priv->link);
+  g_free (priv->created_time);
+  g_free (priv->updated_time);
 
   G_OBJECT_CLASS (gfbgraph_node_parent_class)->finalize (object);
 }
