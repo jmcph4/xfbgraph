@@ -602,8 +602,7 @@ gfbgraph_photo_get_image_near_width (GFBGraphPhoto *photo,
   images_list = priv->images;
   while (images_list) {
     tmp_photo_image = (GFBGraphPhotoImage *) images_list->data;
-    tmp_w_dif = tmp_photo_image->width - width;
-    tmp_w_dif = (tmp_w_dif > 0) ? tmp_w_dif : (tmp_w_dif * -1);
+    tmp_w_dif = ABS (tmp_photo_image->width - width);
 
     if (photo_image == NULL || tmp_w_dif < w_dif) {
       w_dif = tmp_w_dif;
