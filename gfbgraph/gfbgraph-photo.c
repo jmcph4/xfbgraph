@@ -75,17 +75,13 @@ static void
 gfbgraph_photo_finalize (GObject *object)
 {
   GFBGraphPhotoPrivate *priv = GFBGRAPH_PHOTO_GET_PRIVATE (object);
-  GList *images;
-  GFBGraphPhotoImage *photo_image;
+  GList *image;
 
-  images = priv->images;
-  while (images) {
-    photo_image = (GFBGraphPhotoImage *) images->data;
+  for (image = priv->images; image; image = g_list_next (image)) {
+    GFBGraphPhotoImage *photo_image = (GFBGraphPhotoImage*) image->data;
 
     g_free (photo_image->source);
     g_free (photo_image);
-
-    images = g_list_next (images);
   }
 
   g_free (priv->name);
@@ -566,19 +562,16 @@ gfbgraph_photo_get_image_hires (GFBGraphPhoto *photo)
   priv = GFBGRAPH_PHOTO_GET_PRIVATE (photo);
 
   if (priv->hires_image == NULL) {
-    GList *images_list;
+    GList *image;
     guint bigger_width = 0;
-    GFBGraphPhotoImage *photo_image;
 
-    images_list = priv->images;
-    while (images_list) {
-      photo_image = (GFBGraphPhotoImage *) images_list->data;
+    for (image = priv->images; image; image = g_list_next (image)) {
+      GFBGraphPhotoImage *photo_image = (GFBGraphPhotoImage*) image->data;
+
       if (photo_image->width > bigger_width) {
         priv->hires_image = photo_image;
         bigger_width = photo_image->width;
       }
-
-      images_list = g_list_next (images_list);
     }
   }
 
@@ -590,27 +583,22 @@ gfbgraph_photo_get_image_near_width (GFBGraphPhoto *photo,
                                      guint          width)
 {
   GFBGraphPhotoPrivate *priv;
-  GList *images_list;
-  GFBGraphPhotoImage *tmp_photo_image;
   GFBGraphPhotoImage *photo_image = NULL;
-  gint tmp_w_dif, w_dif;
+  GList *image;
+  gint least_diff = width << 1;
 
   g_return_val_if_fail (GFBGRAPH_IS_PHOTO (photo), NULL);
 
   priv = GFBGRAPH_PHOTO_GET_PRIVATE (photo);
 
-  images_list = priv->images;
-  while (images_list) {
-    tmp_photo_image = (GFBGraphPhotoImage *) images_list->data;
-    tmp_w_dif = ABS (tmp_photo_image->width - width);
+  for (image = priv->images; image; image = g_list_next (image)) {
+    GFBGraphPhotoImage *tmp_image = (GFBGraphPhotoImage*) image->data;
+    gint tmp_diff = ABS (tmp_image->width - width);
 
-    if (photo_image == NULL || tmp_w_dif < w_dif) {
-      w_dif = tmp_w_dif;
-      photo_image = tmp_photo_image;
-    } else {
+    if (photo_image == NULL || tmp_diff < least_diff) {
+      least_diff = tmp_diff;
+      photo_image = tmp_image;
     }
-
-    images_list = g_list_next (images_list);
   }
 
   return photo_image;
@@ -621,26 +609,22 @@ gfbgraph_photo_get_image_near_height (GFBGraphPhoto *photo,
                                       guint          height)
 {
   GFBGraphPhotoPrivate *priv;
-  GList *images_list;
-  GFBGraphPhotoImage *tmp_photo_image;
   GFBGraphPhotoImage *photo_image = NULL;
-  gint tmp_h_dif, h_dif;
+  GList *image;
+  gint least_diff = height << 1;
 
   g_return_val_if_fail (GFBGRAPH_IS_PHOTO (photo), NULL);
 
   priv = GFBGRAPH_PHOTO_GET_PRIVATE (photo);
 
-  images_list = priv->images;
-  while (images_list) {
-    tmp_photo_image = (GFBGraphPhotoImage *) images_list->data;
-    tmp_h_dif = ABS(tmp_photo_image->height - height);
+  for (image = priv->images; image; image = g_list_next (image)) {
+    GFBGraphPhotoImage *tmp_image = (GFBGraphPhotoImage*) image->data;
+    gint tmp_diff = ABS (tmp_image->height - height);
 
-    if (photo_image == NULL || tmp_h_dif < h_dif) {
-      h_dif = tmp_h_dif;
-      photo_image = tmp_photo_image;
+    if (photo_image == NULL || tmp_diff < least_diff) {
+      least_diff = tmp_diff;
+      photo_image = tmp_image;
     }
-
-    images_list = g_list_next (images_list);
   }
 
   return photo_image;
