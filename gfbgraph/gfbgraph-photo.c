@@ -36,16 +36,6 @@
 #include <libsoup/soup-request-http.h>
 #include <libsoup/soup-requester.h>
 
-enum {
-  PROP_0,
-
-  PROP_NAME,
-  PROP_SOURCE,
-  PROP_HEIGHT,
-  PROP_WIDTH,
-  PROP_IMAGES
-};
-
 typedef struct
 {
   gchar              *name;
@@ -82,6 +72,19 @@ G_DEFINE_TYPE_WITH_CODE (GFBGraphPhoto, gfbgraph_photo, GFBGRAPH_TYPE_NODE,
                          G_IMPLEMENT_INTERFACE (GFBGRAPH_TYPE_CONNECTABLE, gfbgraph_photo_connectable_iface_init)
                          G_IMPLEMENT_INTERFACE (JSON_TYPE_SERIALIZABLE, gfbgraph_photo_serializable_iface_init));
 
+/* Properties */
+enum {
+  PROP_0,
+  PROP_NAME,
+  PROP_SOURCE,
+  PROP_HEIGHT,
+  PROP_WIDTH,
+  PROP_IMAGES,
+  N_PROPERTIES
+};
+
+static GParamSpec* properties [N_PROPERTIES];
+
 static void
 gfbgraph_photo_init (GFBGraphPhoto *obj)
 {
@@ -105,59 +108,56 @@ gfbgraph_photo_class_init (GFBGraphPhotoClass *klass)
    *
    * The name of the photo given by his owner.
    **/
-  g_object_class_install_property (gobject_class,
-                                   PROP_NAME,
-                                   g_param_spec_string ("name",
-                                                        "The photo name", "The name given by the user to the photo",
-                                                        "",
-                                                        G_PARAM_READABLE | G_PARAM_WRITABLE));
+  properties [PROP_NAME] =
+    g_param_spec_string ("name", "The photo name",
+                         "The name given by the user to the photo",
+                         NULL,
+                         G_PARAM_READWRITE);
 
   /**
    * GFBGraphPhoto:source:
    *
    * An URI for the photo, with a maximum width or height of 720px.
    **/
-  g_object_class_install_property (gobject_class,
-                                   PROP_SOURCE,
-                                   g_param_spec_string ("source",
-                                                        "The URI for the photo", "The URI for the photo, with a maximum width or height of 720px",
-                                                        "",
-                                                        G_PARAM_READABLE | G_PARAM_WRITABLE));
+  properties [PROP_SOURCE] =
+    g_param_spec_string ("source", "The URI for the photo",
+                         "The URI for the photo, with a maximum width or height of 720px",
+                         NULL,
+                         G_PARAM_READWRITE);
 
   /**
    * GFBGraphPhoto:width:
    *
    * The default photo width, up to 720px.
    **/
-  g_object_class_install_property (gobject_class,
-                                   PROP_WIDTH,
-                                   g_param_spec_uint ("width",
-                                                      "Photo width", "The photo width",
-                                                      0, G_MAXUINT, 0,
-                                                      G_PARAM_READABLE | G_PARAM_WRITABLE));
+  properties [PROP_WIDTH] =
+    g_param_spec_uint ("width", "The photo width",
+                       "The photo width",
+                       0, G_MAXUINT, 0,
+                       G_PARAM_READWRITE);
 
   /**
    * GFBGraphPhoto:height:
    *
    * The default photo height, up to 720px.
    **/
-  g_object_class_install_property (gobject_class,
-                                   PROP_HEIGHT,
-                                   g_param_spec_uint ("height",
-                                                      "Photo height", "The photo height",
-                                                      0, G_MAXUINT, 0,
-                                                      G_PARAM_READABLE | G_PARAM_WRITABLE));
+  properties [PROP_HEIGHT] =
+    g_param_spec_uint ("height", "The photo height",
+                       "The photo height",
+                       0, G_MAXUINT, 0,
+                       G_PARAM_WRITABLE);
 
   /**
    * GFBGraphPhoto:images:
    *
    * A list with the available representations of the photo, in differents sizes
    **/
-  g_object_class_install_property (gobject_class,
-                                   PROP_IMAGES,
-                                   g_param_spec_pointer ("images",
-                                                          "Sizes of the photo", "The diffents sizes available of the photo",
-                                                          G_PARAM_READABLE | G_PARAM_WRITABLE));
+  properties [PROP_IMAGES] =
+    g_param_spec_pointer ("images", "Sizes of the photo",
+                          "The different sizes available of the photo",
+                          G_PARAM_READWRITE);
+
+  g_object_class_install_properties (gobject_class, N_PROPERTIES, properties);
 }
 
 static void
