@@ -46,24 +46,8 @@ typedef struct
   GFBGraphPhotoImage *hires_image;
 } GFBGraphPhotoPrivate;
 
-static void gfbgraph_photo_init         (GFBGraphPhoto *obj);
-static void gfbgraph_photo_class_init   (GFBGraphPhotoClass *klass);
-static void gfbgraph_photo_finalize     (GObject *obj);
-static void gfbgraph_photo_set_property (GObject *object, guint prop_id, const GValue *value, GParamSpec *pspec);
-static void gfbgraph_photo_get_property (GObject *object, guint prop_id, GValue *value, GParamSpec *pspec);
-
-static void gfbgraph_photo_connectable_iface_init     (GFBGraphConnectableInterface *iface);
-GHashTable* gfbgraph_photo_get_connection_post_params (GFBGraphConnectable *self, GType node_type);
-
-static void  gfbgraph_photo_serializable_iface_init           (JsonSerializableIface *iface);
-JsonNode    *gfbgraph_photo_serializable_serialize_property   (JsonSerializable *serializable, const gchar *property_name, const GValue *value, GParamSpec *pspec);
-gboolean     gfbgraph_photo_serializable_deserialize_property (JsonSerializable *serializable, const gchar *property_name, GValue *value, GParamSpec *pspec, JsonNode *property_node);
-GParamSpec  *gfbgraph_photo_serializable_find_property        (JsonSerializable *serializable, const char *name);
-GParamSpec **gfbgraph_photo_serializable_list_properties      (JsonSerializable *serializable, guint *n_pspecs);
-void         gfbgraph_photo_serializable_set_property         (JsonSerializable *serializable, GParamSpec *pspec, const GValue *value);
-void         gfbgraph_photo_serializable_get_property         (JsonSerializable *serializable, GParamSpec *pspec, GValue *value);
-
-#define GFBGRAPH_PHOTO_GET_PRIVATE(_obj) gfbgraph_photo_get_instance_private (GFBGRAPH_PHOTO (_obj))
+static void  gfbgraph_photo_connectable_iface_init    (GFBGraphConnectableInterface *iface);
+static void  gfbgraph_photo_serializable_iface_init   (JsonSerializableIface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GFBGraphPhoto, gfbgraph_photo, GFBGRAPH_TYPE_NODE,
                          G_ADD_PRIVATE (GFBGraphPhoto)
@@ -83,80 +67,10 @@ enum {
 
 static GParamSpec* properties [N_PROPERTIES];
 
-static void
-gfbgraph_photo_init (GFBGraphPhoto *obj)
-{
-  GFBGraphPhotoPrivate *priv = GFBGRAPH_PHOTO_GET_PRIVATE (obj);
+#define GFBGRAPH_PHOTO_GET_PRIVATE(_obj) gfbgraph_photo_get_instance_private (GFBGRAPH_PHOTO (_obj))
 
-  priv->images = NULL;
-}
 
-static void
-gfbgraph_photo_class_init (GFBGraphPhotoClass *klass)
-{
-  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
-
-  gobject_class->finalize = gfbgraph_photo_finalize;
-  gobject_class->set_property = gfbgraph_photo_set_property;
-  gobject_class->get_property = gfbgraph_photo_get_property;
-
-  /**
-   * GFBGraphPhoto:name:
-   *
-   * The name of the photo given by his owner.
-   **/
-  properties [PROP_NAME] =
-    g_param_spec_string ("name", "The photo name",
-                         "The name given by the user to the photo",
-                         NULL,
-                         G_PARAM_READWRITE);
-
-  /**
-   * GFBGraphPhoto:source:
-   *
-   * An URI for the photo, with a maximum width or height of 720px.
-   **/
-  properties [PROP_SOURCE] =
-    g_param_spec_string ("source", "The URI for the photo",
-                         "The URI for the photo, with a maximum width or height of 720px",
-                         NULL,
-                         G_PARAM_READWRITE);
-
-  /**
-   * GFBGraphPhoto:width:
-   *
-   * The default photo width, up to 720px.
-   **/
-  properties [PROP_WIDTH] =
-    g_param_spec_uint ("width", "The photo width",
-                       "The photo width",
-                       0, G_MAXUINT, 0,
-                       G_PARAM_READWRITE);
-
-  /**
-   * GFBGraphPhoto:height:
-   *
-   * The default photo height, up to 720px.
-   **/
-  properties [PROP_HEIGHT] =
-    g_param_spec_uint ("height", "The photo height",
-                       "The photo height",
-                       0, G_MAXUINT, 0,
-                       G_PARAM_WRITABLE);
-
-  /**
-   * GFBGraphPhoto:images:
-   *
-   * A list with the available representations of the photo, in differents sizes
-   **/
-  properties [PROP_IMAGES] =
-    g_param_spec_pointer ("images", "Sizes of the photo",
-                          "The different sizes available of the photo",
-                          G_PARAM_READWRITE);
-
-  g_object_class_install_properties (gobject_class, N_PROPERTIES, properties);
-}
-
+/* --- GObject --- */
 static void
 gfbgraph_photo_finalize (GObject *obj)
 {
@@ -252,18 +166,81 @@ gfbgraph_photo_get_property (GObject    *object,
 }
 
 static void
-gfbgraph_photo_connectable_iface_init (GFBGraphConnectableInterface *iface)
+gfbgraph_photo_init (GFBGraphPhoto *obj)
 {
-  GHashTable *connections;
+  GFBGraphPhotoPrivate *priv = GFBGRAPH_PHOTO_GET_PRIVATE (obj);
 
-  connections = g_hash_table_new (g_str_hash, g_str_equal);
-  g_hash_table_insert (connections, (gpointer) g_type_name (GFBGRAPH_TYPE_ALBUM), (gpointer) "photos");
-
-  iface->connections = connections;
-  iface->get_connection_post_params = gfbgraph_photo_get_connection_post_params;
-  iface->parse_connected_data = gfbgraph_connectable_default_parse_connected_data;
+  priv->images = NULL;
 }
 
+static void
+gfbgraph_photo_class_init (GFBGraphPhotoClass *klass)
+{
+  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+
+  gobject_class->finalize = gfbgraph_photo_finalize;
+  gobject_class->set_property = gfbgraph_photo_set_property;
+  gobject_class->get_property = gfbgraph_photo_get_property;
+
+  /**
+   * GFBGraphPhoto:name:
+   *
+   * The name of the photo given by his owner.
+   **/
+  properties [PROP_NAME] =
+    g_param_spec_string ("name", "The photo name",
+                         "The name given by the user to the photo",
+                         NULL,
+                         G_PARAM_READWRITE);
+
+  /**
+   * GFBGraphPhoto:source:
+   *
+   * An URI for the photo, with a maximum width or height of 720px.
+   **/
+  properties [PROP_SOURCE] =
+    g_param_spec_string ("source", "The URI for the photo",
+                         "The URI for the photo, with a maximum width or height of 720px",
+                         NULL,
+                         G_PARAM_READWRITE);
+
+  /**
+   * GFBGraphPhoto:width:
+   *
+   * The default photo width, up to 720px.
+   **/
+  properties [PROP_WIDTH] =
+    g_param_spec_uint ("width", "The photo width",
+                       "The photo width",
+                       0, G_MAXUINT, 0,
+                       G_PARAM_READWRITE);
+
+  /**
+   * GFBGraphPhoto:height:
+   *
+   * The default photo height, up to 720px.
+   **/
+  properties [PROP_HEIGHT] =
+    g_param_spec_uint ("height", "The photo height",
+                       "The photo height",
+                       0, G_MAXUINT, 0,
+                       G_PARAM_WRITABLE);
+
+  /**
+   * GFBGraphPhoto:images:
+   *
+   * A list with the available representations of the photo, in differents sizes
+   **/
+  properties [PROP_IMAGES] =
+    g_param_spec_pointer ("images", "Sizes of the photo",
+                          "The different sizes available of the photo",
+                          G_PARAM_READWRITE);
+
+  g_object_class_install_properties (gobject_class, N_PROPERTIES, properties);
+}
+
+/* --- Private methods --- */
+/* --- Implement GFBGraphConnectable interface --- */
 GHashTable*
 gfbgraph_photo_get_connection_post_params (GFBGraphConnectable *self,
                                            GType                node_type)
@@ -281,16 +258,19 @@ gfbgraph_photo_get_connection_post_params (GFBGraphConnectable *self,
 }
 
 static void
-gfbgraph_photo_serializable_iface_init (JsonSerializableIface *iface)
+gfbgraph_photo_connectable_iface_init (GFBGraphConnectableInterface *iface)
 {
-  iface->serialize_property   = gfbgraph_photo_serializable_serialize_property;
-  iface->deserialize_property = gfbgraph_photo_serializable_deserialize_property;
-  iface->find_property        = gfbgraph_photo_serializable_find_property;
-  iface->list_properties      = gfbgraph_photo_serializable_list_properties;
-  iface->set_property         = gfbgraph_photo_serializable_set_property;
-  iface->get_property         = gfbgraph_photo_serializable_get_property;
+  GHashTable *connections;
+
+  connections = g_hash_table_new (g_str_hash, g_str_equal);
+  g_hash_table_insert (connections, (gpointer) g_type_name (GFBGRAPH_TYPE_ALBUM), (gpointer) "photos");
+
+  iface->connections = connections;
+  iface->get_connection_post_params = gfbgraph_photo_get_connection_post_params;
+  iface->parse_connected_data = gfbgraph_connectable_default_parse_connected_data;
 }
 
+/* --- Implement JsonSerialiable interface --- */
 JsonNode *
 gfbgraph_photo_serializable_serialize_property (JsonSerializable *serializable,
                                                 const gchar      *property_name,
@@ -382,6 +362,19 @@ gfbgraph_photo_serializable_get_property (JsonSerializable *serializable,
 {
   g_object_get_property (G_OBJECT (serializable), g_param_spec_get_name (pspec), value);
 }
+
+static void
+gfbgraph_photo_serializable_iface_init (JsonSerializableIface *iface)
+{
+  iface->serialize_property   = gfbgraph_photo_serializable_serialize_property;
+  iface->deserialize_property = gfbgraph_photo_serializable_deserialize_property;
+  iface->find_property        = gfbgraph_photo_serializable_find_property;
+  iface->list_properties      = gfbgraph_photo_serializable_list_properties;
+  iface->set_property         = gfbgraph_photo_serializable_set_property;
+  iface->get_property         = gfbgraph_photo_serializable_get_property;
+}
+
+/* --- Public APIs --- */
 
 /**
  * gfbgraph_photo_new:
