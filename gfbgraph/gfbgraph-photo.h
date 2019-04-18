@@ -25,25 +25,8 @@
 
 G_BEGIN_DECLS
 
-#define GFBGRAPH_TYPE_PHOTO             (gfbgraph_photo_get_type())
-#define GFBGRAPH_PHOTO(obj)             (G_TYPE_CHECK_INSTANCE_CAST((obj),GFBGRAPH_TYPE_PHOTO,GFBGraphPhoto))
-#define GFBGRAPH_PHOTO_CLASS(klass)     (G_TYPE_CHECK_CLASS_CAST((klass),GFBGRAPH_TYPE_PHOTO,GFBGraphPhotoClass))
-#define GFBGRAPH_IS_PHOTO(obj)          (G_TYPE_CHECK_INSTANCE_TYPE((obj),GFBGRAPH_TYPE_PHOTO))
-#define GFBGRAPH_IS_PHOTO_CLASS(klass)  (G_TYPE_CHECK_CLASS_TYPE((klass),GFBGRAPH_TYPE_PHOTO))
-#define GFBGRAPH_PHOTO_GET_CLASS(obj)   (G_TYPE_INSTANCE_GET_CLASS((obj),GFBGRAPH_TYPE_PHOTO,GFBGraphPhotoClass))
-
-typedef struct _GFBGraphPhoto        GFBGraphPhoto;
-typedef struct _GFBGraphPhotoClass   GFBGraphPhotoClass;
-typedef struct _GFBGraphPhotoPrivate GFBGraphPhotoPrivate;
-
-G_DEFINE_AUTOPTR_CLEANUP_FUNC (GFBGraphPhoto, g_object_unref)
-
-struct _GFBGraphPhoto {
-        GFBGraphNode parent;
-
-        /*< private >*/
-        GFBGraphPhotoPrivate *priv;
-};
+#define GFBGRAPH_TYPE_PHOTO (gfbgraph_photo_get_type())
+G_DECLARE_DERIVABLE_TYPE (GFBGraphPhoto, gfbgraph_photo, GFBGRAPH, PHOTO, GFBGraphNode)
 
 struct _GFBGraphPhotoClass {
         GFBGraphNodeClass parent_class;
@@ -62,7 +45,6 @@ struct _GFBGraphPhotoImage {
         gchar *source;
 };
 
-GType          gfbgraph_photo_get_type (void) G_GNUC_CONST;
 GFBGraphPhoto* gfbgraph_photo_new      (void);
 GFBGraphPhoto* gfbgraph_photo_new_from_id (GFBGraphAuthorizer *authorizer, const gchar *id, GError **error);
 GInputStream*  gfbgraph_photo_download_default_size (GFBGraphPhoto *photo, GFBGraphAuthorizer *authorizer, GError **error);

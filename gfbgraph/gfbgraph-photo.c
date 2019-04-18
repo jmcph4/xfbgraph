@@ -46,14 +46,15 @@ enum {
         PROP_IMAGES
 };
 
-struct _GFBGraphPhotoPrivate {
+typedef struct
+{
         gchar              *name;
         gchar              *source;
         guint               width;
         guint               height;
         GList              *images;
         GFBGraphPhotoImage *hires_image;
-};
+} GFBGraphPhotoPrivate;
 
 static void gfbgraph_photo_init         (GFBGraphPhoto *obj);
 static void gfbgraph_photo_class_init   (GFBGraphPhotoClass *klass);
@@ -72,20 +73,21 @@ GParamSpec **gfbgraph_photo_serializable_list_properties      (JsonSerializable 
 void         gfbgraph_photo_serializable_set_property         (JsonSerializable *serializable, GParamSpec *pspec, const GValue *value);
 void         gfbgraph_photo_serializable_get_property         (JsonSerializable *serializable, GParamSpec *pspec, GValue *value);
 
-#define GFBGRAPH_PHOTO_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE((o), GFBGRAPH_TYPE_PHOTO, GFBGraphPhotoPrivate))
+#define GFBGRAPH_PHOTO_GET_PRIVATE(_obj) gfbgraph_photo_get_instance_private (GFBGRAPH_PHOTO (_obj))
 
 static GFBGraphNodeClass *parent_class = NULL;
 
 G_DEFINE_TYPE_WITH_CODE (GFBGraphPhoto, gfbgraph_photo, GFBGRAPH_TYPE_NODE,
-                         G_IMPLEMENT_INTERFACE (GFBGRAPH_TYPE_CONNECTABLE, gfbgraph_photo_connectable_iface_init);
-                         G_IMPLEMENT_INTERFACE (JSON_TYPE_SERIALIZABLE, gfbgraph_photo_serializable_iface_init););
+                         G_ADD_PRIVATE (GFBGraphPhoto)
+                         G_IMPLEMENT_INTERFACE (GFBGRAPH_TYPE_CONNECTABLE, gfbgraph_photo_connectable_iface_init)
+                         G_IMPLEMENT_INTERFACE (JSON_TYPE_SERIALIZABLE, gfbgraph_photo_serializable_iface_init));
 
 static void
 gfbgraph_photo_init (GFBGraphPhoto *obj)
 {
-        obj->priv = GFBGRAPH_PHOTO_GET_PRIVATE(obj);
+        GFBGraphPhotoPrivate *priv = GFBGRAPH_PHOTO_GET_PRIVATE (obj);
 
-        obj->priv->images = NULL;
+        priv->images = NULL;
 }
 
 static void
@@ -97,8 +99,6 @@ gfbgraph_photo_class_init (GFBGraphPhotoClass *klass)
         gobject_class->finalize = gfbgraph_photo_finalize;
         gobject_class->set_property = gfbgraph_photo_set_property;
         gobject_class->get_property = gfbgraph_photo_get_property;
-
-        g_type_class_add_private (gobject_class, sizeof(GFBGraphPhotoPrivate));
 
         /**
          * GFBGraphPhoto:name:
@@ -453,9 +453,13 @@ gfbgraph_photo_download_default_size (GFBGraphPhoto *photo, GFBGraphAuthorizer *
 const gchar*
 gfbgraph_photo_get_name (GFBGraphPhoto *photo)
 {
+        GFBGraphPhotoPrivate *priv;
+
         g_return_val_if_fail (GFBGRAPH_IS_PHOTO (photo), NULL);
 
-        return photo->priv->name;
+        priv = GFBGRAPH_PHOTO_GET_PRIVATE (photo);
+
+        return priv->name;
 }
 
 /**
@@ -467,9 +471,13 @@ gfbgraph_photo_get_name (GFBGraphPhoto *photo)
 const gchar*
 gfbgraph_photo_get_default_source_uri (GFBGraphPhoto *photo)
 {
+        GFBGraphPhotoPrivate *priv;
+
         g_return_val_if_fail (GFBGRAPH_IS_PHOTO (photo), NULL);
 
-        return photo->priv->source;
+        priv = GFBGRAPH_PHOTO_GET_PRIVATE (photo);
+
+        return priv->source;
 }
 
 /**
@@ -481,9 +489,13 @@ gfbgraph_photo_get_default_source_uri (GFBGraphPhoto *photo)
 guint
 gfbgraph_photo_get_default_width (GFBGraphPhoto *photo)
 {
+        GFBGraphPhotoPrivate *priv;
+
         g_return_val_if_fail (GFBGRAPH_IS_PHOTO (photo), 0);
 
-        return photo->priv->width;
+        priv = GFBGRAPH_PHOTO_GET_PRIVATE (photo);
+
+        return priv->width;
 }
 
 /**
@@ -495,9 +507,13 @@ gfbgraph_photo_get_default_width (GFBGraphPhoto *photo)
 guint
 gfbgraph_photo_get_default_height (GFBGraphPhoto *photo)
 {
+        GFBGraphPhotoPrivate *priv;
+
         g_return_val_if_fail (GFBGRAPH_IS_PHOTO (photo), 0);
 
-        return photo->priv->height;
+        priv = GFBGRAPH_PHOTO_GET_PRIVATE (photo);
+
+        return priv->height;
 }
 
 /**
@@ -509,9 +525,13 @@ gfbgraph_photo_get_default_height (GFBGraphPhoto *photo)
 GList*
 gfbgraph_photo_get_images (GFBGraphPhoto *photo)
 {
+        GFBGraphPhotoPrivate *priv;
+
         g_return_val_if_fail (GFBGRAPH_IS_PHOTO (photo), NULL);
 
-        return photo->priv->images;
+        priv = GFBGRAPH_PHOTO_GET_PRIVATE (photo);
+
+        return priv->images;
 }
 
 /**
@@ -523,19 +543,23 @@ gfbgraph_photo_get_images (GFBGraphPhoto *photo)
 const GFBGraphPhotoImage*
 gfbgraph_photo_get_image_hires (GFBGraphPhoto *photo)
 {
+        GFBGraphPhotoPrivate *priv;
+
         g_return_val_if_fail (GFBGRAPH_IS_PHOTO (photo), NULL);
 
-        if (photo->priv->hires_image == NULL) {
+        priv = GFBGRAPH_PHOTO_GET_PRIVATE (photo);
+
+        if (priv->hires_image == NULL) {
                 GList *images_list;
                 guint bigger_width;
                 GFBGraphPhotoImage *photo_image;
 
                 bigger_width = 0;
-                images_list = photo->priv->images;
+                images_list = priv->images;
                 while (images_list) {
                         photo_image = (GFBGraphPhotoImage *) images_list->data;
                         if (photo_image->width > bigger_width) {
-                                photo->priv->hires_image = photo_image;
+                                priv->hires_image = photo_image;
                                 bigger_width = photo_image->width;
                         }
 
@@ -543,12 +567,13 @@ gfbgraph_photo_get_image_hires (GFBGraphPhoto *photo)
                 }
         }
 
-        return photo->priv->hires_image;
+        return priv->hires_image;
 }
 
 const GFBGraphPhotoImage*
 gfbgraph_photo_get_image_near_width (GFBGraphPhoto *photo, guint width)
 {
+        GFBGraphPhotoPrivate *priv;
         GList *images_list;
         GFBGraphPhotoImage *tmp_photo_image;
         GFBGraphPhotoImage *photo_image;
@@ -556,8 +581,10 @@ gfbgraph_photo_get_image_near_width (GFBGraphPhoto *photo, guint width)
 
         g_return_val_if_fail (GFBGRAPH_IS_PHOTO (photo), NULL);
 
+        priv = GFBGRAPH_PHOTO_GET_PRIVATE (photo);
+
         photo_image = NULL;
-        images_list = photo->priv->images;
+        images_list = priv->images;
         while (images_list) {
                 tmp_photo_image = (GFBGraphPhotoImage *) images_list->data;
                 tmp_w_dif = tmp_photo_image->width - width;
@@ -579,6 +606,7 @@ gfbgraph_photo_get_image_near_width (GFBGraphPhoto *photo, guint width)
 const GFBGraphPhotoImage*
 gfbgraph_photo_get_image_near_height (GFBGraphPhoto *photo, guint height)
 {
+        GFBGraphPhotoPrivate *priv;
         GList *images_list;
         GFBGraphPhotoImage *tmp_photo_image;
         GFBGraphPhotoImage *photo_image;
@@ -586,8 +614,10 @@ gfbgraph_photo_get_image_near_height (GFBGraphPhoto *photo, guint height)
 
         g_return_val_if_fail (GFBGRAPH_IS_PHOTO (photo), NULL);
 
+        priv = GFBGRAPH_PHOTO_GET_PRIVATE (photo);
+
         photo_image = NULL;
-        images_list = photo->priv->images;
+        images_list = priv->images;
         while (images_list) {
                 tmp_photo_image = (GFBGraphPhotoImage *) images_list->data;
                 tmp_h_dif = ABS(tmp_photo_image->height - height);
