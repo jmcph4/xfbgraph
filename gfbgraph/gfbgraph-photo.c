@@ -65,8 +65,6 @@ void         gfbgraph_photo_serializable_get_property         (JsonSerializable 
 
 #define GFBGRAPH_PHOTO_GET_PRIVATE(_obj) gfbgraph_photo_get_instance_private (GFBGRAPH_PHOTO (_obj))
 
-static GFBGraphNodeClass *parent_class = NULL;
-
 G_DEFINE_TYPE_WITH_CODE (GFBGraphPhoto, gfbgraph_photo, GFBGRAPH_TYPE_NODE,
                          G_ADD_PRIVATE (GFBGraphPhoto)
                          G_IMPLEMENT_INTERFACE (GFBGRAPH_TYPE_CONNECTABLE, gfbgraph_photo_connectable_iface_init)
@@ -98,7 +96,6 @@ gfbgraph_photo_class_init (GFBGraphPhotoClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
-  parent_class            = g_type_class_peek_parent (klass);
   gobject_class->finalize = gfbgraph_photo_finalize;
   gobject_class->set_property = gfbgraph_photo_set_property;
   gobject_class->get_property = gfbgraph_photo_get_property;
@@ -183,7 +180,7 @@ gfbgraph_photo_finalize (GObject *obj)
   g_free (priv->source);
   g_list_free (priv->images);
 
-  G_OBJECT_CLASS(parent_class)->finalize (obj);
+  G_OBJECT_CLASS (gfbgraph_photo_parent_class)->finalize (obj);
 }
 
 static void
