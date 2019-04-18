@@ -1,4 +1,4 @@
-/* -*- Mode: C; indent-tabs-mode: nil; c-basic-offset: 8; tab-width: 8 -*-  */
+/* -*- Mode: C; indent-tabs-mode: nil; c-basic-offset: 2; tab-width: 2 -*-  */
 /*
  * libgfbgraph - GObject library for Facebook Graph API
  * Copyright (C) 2013 Álvaro Peña <alvaropg@gmail.com>
@@ -29,7 +29,7 @@ G_BEGIN_DECLS
 G_DECLARE_DERIVABLE_TYPE (GFBGraphPhoto, gfbgraph_photo, GFBGRAPH, PHOTO, GFBGraphNode)
 
 struct _GFBGraphPhotoClass {
-        GFBGraphNodeClass parent_class;
+  GFBGraphNodeClass parent_class;
 };
 
 typedef struct _GFBGraphPhotoImage GFBGraphPhotoImage;
@@ -40,23 +40,29 @@ typedef struct _GFBGraphPhotoImage GFBGraphPhotoImage;
  * An struct with the information of a image.
  */
 struct _GFBGraphPhotoImage {
-        guint  width;
-        guint  height;
-        gchar *source;
+  guint  width;
+  guint  height;
+  gchar *source;
 };
 
-GFBGraphPhoto* gfbgraph_photo_new      (void);
-GFBGraphPhoto* gfbgraph_photo_new_from_id (GFBGraphAuthorizer *authorizer, const gchar *id, GError **error);
-GInputStream*  gfbgraph_photo_download_default_size (GFBGraphPhoto *photo, GFBGraphAuthorizer *authorizer, GError **error);
+GFBGraphPhoto*            gfbgraph_photo_new                    (void);
+GFBGraphPhoto*            gfbgraph_photo_new_from_id            (GFBGraphAuthorizer  *authorizer,
+                                                                 const gchar         *id,
+                                                                 GError             **error);
+GInputStream*             gfbgraph_photo_download_default_size  (GFBGraphPhoto       *photo,
+                                                                 GFBGraphAuthorizer  *authorizer,
+                                                                 GError             **error);
 
-const gchar*        gfbgraph_photo_get_name               (GFBGraphPhoto *photo);
-const gchar*        gfbgraph_photo_get_default_source_uri (GFBGraphPhoto *photo);
-guint               gfbgraph_photo_get_default_width      (GFBGraphPhoto *photo);
-guint               gfbgraph_photo_get_default_height     (GFBGraphPhoto *photo);
-GList*              gfbgraph_photo_get_images             (GFBGraphPhoto *photo);
+const gchar*              gfbgraph_photo_get_name               (GFBGraphPhoto *photo);
+const gchar*              gfbgraph_photo_get_default_source_uri (GFBGraphPhoto *photo);
+guint                     gfbgraph_photo_get_default_width      (GFBGraphPhoto *photo);
+guint                     gfbgraph_photo_get_default_height     (GFBGraphPhoto *photo);
+GList*                    gfbgraph_photo_get_images             (GFBGraphPhoto *photo);
 const GFBGraphPhotoImage* gfbgraph_photo_get_image_hires        (GFBGraphPhoto *photo);
-const GFBGraphPhotoImage* gfbgraph_photo_get_image_near_width   (GFBGraphPhoto *photo, guint width);
-const GFBGraphPhotoImage* gfbgraph_photo_get_image_near_height  (GFBGraphPhoto *photo, guint height);
+const GFBGraphPhotoImage* gfbgraph_photo_get_image_near_width   (GFBGraphPhoto *photo,
+                                                                 guint          width);
+const GFBGraphPhotoImage* gfbgraph_photo_get_image_near_height  (GFBGraphPhoto *photo,
+                                                                 guint          height);
 
 G_END_DECLS
 
