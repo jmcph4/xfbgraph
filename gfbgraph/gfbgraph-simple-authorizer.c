@@ -75,13 +75,12 @@ gfbgraph_simple_authorizer_set_property (GObject      *object,
   switch (prop_id)
     {
     case PROP_ACCESS_TOKEN:
-      if (priv->access_token)
-        g_free (priv->access_token);
+      g_free (priv->access_token);
       priv->access_token = g_strdup (g_value_get_string (value));
       break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-      break;
     }
 }
 
@@ -98,9 +97,9 @@ gfbgraph_simple_authorizer_get_property (GObject    *object,
     case PROP_ACCESS_TOKEN:
       g_value_set_string (value, priv->access_token);
       break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-      break;
     }
 }
 
