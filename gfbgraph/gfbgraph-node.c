@@ -55,8 +55,6 @@ typedef struct
   GFBGraphAuthorizer *authorizer;
 } GFBGraphNodeConnectionAsyncData;
 
-#define GFBGRAPH_NODE_GET_PRIVATE(_obj) gfbgraph_node_get_instance_private (GFBGRAPH_NODE (_obj))
-
 G_DEFINE_TYPE_WITH_PRIVATE (GFBGraphNode, gfbgraph_node, G_TYPE_OBJECT)
 
 enum {
@@ -70,88 +68,10 @@ enum {
 
 static GParamSpec *properties [N_PROPERTIES];
 
-/* Forward declarations */
-static void gfbgraph_node_init         (GFBGraphNode *obj);
-static void gfbgraph_node_class_init   (GFBGraphNodeClass *klass);
-static void gfbgraph_node_finalize     (GObject *object);
-static void gfbgraph_node_set_property (GObject *object, guint prop_id, const GValue *value, GParamSpec *pspec);
-static void gfbgraph_node_get_property (GObject *object, guint prop_id, GValue *value, GParamSpec *pspec);
-
-static void gfbgraph_node_connection_async_data_free (GFBGraphNodeConnectionAsyncData *data);
-static void gfbgraph_node_get_connection_nodes_async_thread (GSimpleAsyncResult *simple_async, GFBGraphNode *node, GCancellable cancellable);
+#define GFBGRAPH_NODE_GET_PRIVATE(_obj) gfbgraph_node_get_instance_private (GFBGRAPH_NODE (_obj))
 
 
-GQuark
-gfbgraph_node_error_quark (void)
-{
-  return g_quark_from_static_string ("gfbgraph-node-error-quark");
-}
-
-static void
-gfbgraph_node_class_init (GFBGraphNodeClass *klass)
-{
-  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
-
-  gobject_class->finalize = gfbgraph_node_finalize;
-  gobject_class->set_property = gfbgraph_node_set_property;
-  gobject_class->get_property = gfbgraph_node_get_property;
-
-  /**
-    * GFBGraphNode:id:
-    *
-    * The node ID. All nodes have one of this.
-    **/
-  properties [PROP_ID] =
-    g_param_spec_string ("id",
-                         "The Facebook node ID",
-                         "Every node in the Facebook Graph is identified by his ID",
-                         NULL,
-                         G_PARAM_READWRITE);
-
-  /**
-    * GFBGraphNode:link:
-    *
-    * The node link. An URL to the node on Facebook.
-    **/
-  properties [PROP_LINK] =
-    g_param_spec_string ("link",
-                         "The link to the node",
-                         "A link (url) to the node on Facebook",
-                         NULL,
-                         G_PARAM_READWRITE);
-
-  /**
-    * GFBGraphNode:created_time:
-    *
-    * The time the node was initially published. Is an ISO 8601 encoded date.
-    **/
-  properties [PROP_CREATEDTIME] =
-    g_param_spec_string ("created-time",
-                         "The node creation time",
-                         "An ISO 8601 encoded date when the node was initially published",
-                         NULL,
-                         G_PARAM_READWRITE);
-
-  /**
-    * GFBGraphNode:updated_time:
-    *
-    * The last time the node was updated. Is an ISO 8601 encoded date.
-    **/
-  properties [PROP_UPDATEDTIME] =
-    g_param_spec_string ("updated-time",
-                         "The node updated time",
-                         "An ISO 8601 encoded date when the node was updated",
-                         NULL,
-                         G_PARAM_READWRITE);
-
-  g_object_class_install_properties (gobject_class, N_PROPERTIES, properties);
-}
-
-static void
-gfbgraph_node_init (GFBGraphNode *obj)
-{
-}
-
+/* --- GObject --- */
 static void
 gfbgraph_node_finalize (GObject *object)
 {
@@ -227,6 +147,78 @@ gfbgraph_node_get_property (GObject    *object,
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
+}
+
+static void
+gfbgraph_node_class_init (GFBGraphNodeClass *klass)
+{
+  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+
+  gobject_class->finalize = gfbgraph_node_finalize;
+  gobject_class->set_property = gfbgraph_node_set_property;
+  gobject_class->get_property = gfbgraph_node_get_property;
+
+  /**
+    * GFBGraphNode:id:
+    *
+    * The node ID. All nodes have one of this.
+    **/
+  properties [PROP_ID] =
+    g_param_spec_string ("id",
+                         "The Facebook node ID",
+                         "Every node in the Facebook Graph is identified by his ID",
+                         NULL,
+                         G_PARAM_READWRITE);
+
+  /**
+    * GFBGraphNode:link:
+    *
+    * The node link. An URL to the node on Facebook.
+    **/
+  properties [PROP_LINK] =
+    g_param_spec_string ("link",
+                         "The link to the node",
+                         "A link (url) to the node on Facebook",
+                         NULL,
+                         G_PARAM_READWRITE);
+
+  /**
+    * GFBGraphNode:created_time:
+    *
+    * The time the node was initially published. Is an ISO 8601 encoded date.
+    **/
+  properties [PROP_CREATEDTIME] =
+    g_param_spec_string ("created-time",
+                         "The node creation time",
+                         "An ISO 8601 encoded date when the node was initially published",
+                         NULL,
+                         G_PARAM_READWRITE);
+
+  /**
+    * GFBGraphNode:updated_time:
+    *
+    * The last time the node was updated. Is an ISO 8601 encoded date.
+    **/
+  properties [PROP_UPDATEDTIME] =
+    g_param_spec_string ("updated-time",
+                         "The node updated time",
+                         "An ISO 8601 encoded date when the node was updated",
+                         NULL,
+                         G_PARAM_READWRITE);
+
+  g_object_class_install_properties (gobject_class, N_PROPERTIES, properties);
+}
+
+static void
+gfbgraph_node_init (GFBGraphNode *obj)
+{
+}
+
+/* --- Private methods --- */
+GQuark
+gfbgraph_node_error_quark (void)
+{
+  return g_quark_from_static_string ("gfbgraph-node-error-quark");
 }
 
 static void
