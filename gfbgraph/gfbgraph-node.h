@@ -29,8 +29,6 @@ G_BEGIN_DECLS
 
 G_DECLARE_DERIVABLE_TYPE (GFBGraphNode, gfbgraph_node, GFBGRAPH, NODE, GObject)
 
-#define GFBGRAPH_NODE_ERROR            gfbgraph_node_error_quark ()
-
 struct _GFBGraphNodeClass
 {
   GObjectClass parent_class;
@@ -46,7 +44,6 @@ typedef enum
   GFBGRAPH_NODE_ERROR_NO_CONNECTABLE
 } GFBGraphNodeError;
 
-GQuark         gfbgraph_node_error_quark (void) G_GNUC_CONST;
 GFBGraphNode*  gfbgraph_node_new         (void);
 
 GFBGraphNode*  gfbgraph_node_new_from_id (GFBGraphAuthorizer  *authorizer,

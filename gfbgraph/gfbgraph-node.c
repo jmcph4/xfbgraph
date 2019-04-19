@@ -68,6 +68,7 @@ enum {
 
 static GParamSpec *properties [N_PROPERTIES];
 
+#define GFBGRAPH_NODE_ERROR             gfbgraph_node_error_quark ()
 #define GFBGRAPH_NODE_GET_PRIVATE(_obj) gfbgraph_node_get_instance_private (GFBGRAPH_NODE (_obj))
 
 
