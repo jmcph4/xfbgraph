@@ -97,28 +97,27 @@ gfbgraph_node_set_property (GObject      *object,
   switch (prop_id)
     {
     case PROP_ID:
-      if (priv->id)
-        g_free (priv->id);
+      g_free (priv->id);
       priv->id = g_strdup (g_value_get_string (value));
       break;
+
     case PROP_LINK:
-      if (priv->link)
-        g_free (priv->link);
+      g_free (priv->link);
       priv->link = g_strdup (g_value_get_string (value));
       break;
+
     case PROP_CREATEDTIME:
-      if (priv->created_time)
-        g_free (priv->created_time);
+      g_free (priv->created_time);
       priv->created_time = g_strdup (g_value_get_string (value));
       break;
+
     case PROP_UPDATEDTIME:
-      if (priv->updated_time)
-        g_free (priv->updated_time);
+      g_free (priv->updated_time);
       priv->updated_time = g_strdup (g_value_get_string (value));
       break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-      break;
     }
 }
 
@@ -135,18 +134,21 @@ gfbgraph_node_get_property (GObject    *object,
     case PROP_ID:
       g_value_set_string (value, priv->id);
       break;
+
     case PROP_LINK:
       g_value_set_string (value, priv->link);
       break;
+
     case PROP_CREATEDTIME:
       g_value_set_string (value, priv->created_time);
       break;
+
     case PROP_UPDATEDTIME:
       g_value_set_string (value, priv->updated_time);
       break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-      break;
     }
 }
 
