@@ -16,7 +16,6 @@ lib_headers = \
 	gfbgraph-common.h		\
 	gfbgraph-connectable.h		\
 	gfbgraph-goa-authorizer.h	\
-	gfbgraph-macro.h		\
 	gfbgraph-node.h			\
 	gfbgraph-photo.h		\
 	gfbgraph-simple-authorizer.h    \
