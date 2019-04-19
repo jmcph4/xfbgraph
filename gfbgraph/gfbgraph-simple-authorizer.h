@@ -22,8 +22,6 @@
 
 #include <glib-object.h>
 
-#include "gfbgraph-macro.h"
-
 G_BEGIN_DECLS
 
 #define GFBGRAPH_TYPE_SIMPLE_AUTHORIZER (gfbgraph_simple_authorizer_get_type())
@@ -33,7 +31,12 @@ struct _GFBGraphSimpleAuthorizerClass
 {
   GObjectClass  parent_class;
 
-  gpointer      _reserved[GFBGRAPH_PADDING];
+  gpointer      _reserved1;
+  gpointer      _reserved2;
+  gpointer      _reserved3;
+  gpointer      _reserved4;
+  gpointer      _reserved5;
+  gpointer      _reserved6;
 };
 
 GFBGraphSimpleAuthorizer* gfbgraph_simple_authorizer_new      (const gchar *access_token);
