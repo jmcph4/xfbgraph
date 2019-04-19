@@ -37,8 +37,6 @@ typedef struct
   gchar *access_token;
 } GFBGraphSimpleAuthorizerPrivate;
 
-#define GFBGRAPH_SIMPLE_AUTHORIZER_GET_PRIVATE(_obj) gfbgraph_simple_authorizer_get_instance_private (GFBGRAPH_SIMPLE_AUTHORIZER (_obj))
-
 static void gfbgraph_simple_authorizer_iface_init (GFBGraphAuthorizerInterface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GFBGraphSimpleAuthorizer, gfbgraph_simple_authorizer, G_TYPE_OBJECT,
@@ -51,6 +49,8 @@ enum
   PROP_0,
   PROP_ACCESS_TOKEN
 };
+
+#define GFBGRAPH_SIMPLE_AUTHORIZER_GET_PRIVATE(_obj) gfbgraph_simple_authorizer_get_instance_private (GFBGRAPH_SIMPLE_AUTHORIZER (_obj))
 
 
 /* --- GObject --- */
