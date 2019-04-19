@@ -101,14 +101,12 @@ gfbgraph_photo_set_property (GObject      *object,
 
   switch (prop_id) {
     case PROP_NAME:
-      if (priv->name)
-        g_free (priv->name);
+      g_free (priv->name);
       priv->name = g_strdup (g_value_get_string (value));
       break;
 
     case PROP_SOURCE:
-      if (priv->source)
-        g_free (priv->source);
+      g_free (priv->source);
       priv->source = g_strdup (g_value_get_string (value));
       break;
 
