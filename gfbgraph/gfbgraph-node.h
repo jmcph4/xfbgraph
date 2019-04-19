@@ -33,9 +33,12 @@ struct _GFBGraphNodeClass
 {
   GObjectClass parent_class;
 
-#if 0
-  gpointer _reserved[10];
-#endif
+  gpointer  _reserved1;
+  gpointer  _reserved2;
+  gpointer  _reserved3;
+  gpointer  _reserved4;
+  gpointer  _reserved5;
+  gpointer  _reserved6;
 };
 
 typedef enum
