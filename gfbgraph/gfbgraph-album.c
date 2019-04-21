@@ -156,18 +156,15 @@ gfbgraph_album_set_property (GObject *object, guint prop_id, const GValue *value
 
         switch (prop_id) {
                 case PROP_NAME:
-                        if (priv->name)
-                                g_free (priv->name);
+                        g_free (priv->name);
                         priv->name = g_strdup (g_value_get_string (value));
                         break;
                 case PROP_DESCRIPTION:
-                        if (priv->description)
-                                g_free (priv->description);
+                        g_free (priv->description);
                         priv->description = g_strdup (g_value_get_string (value));
                         break;
                 case PROP_COVER_PHOTO:
-                        if (priv->cover_photo)
-                                g_free (priv->cover_photo);
+                        g_free (priv->cover_photo);
                         priv->cover_photo = g_strdup (g_value_get_string (value));
                         break;
                 case PROP_COUNT:
